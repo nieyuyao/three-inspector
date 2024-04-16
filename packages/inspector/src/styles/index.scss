@@ -1,0 +1,41 @@
+.inspector-ruler-icon {
+	position: fixed;
+	top: -99999px;
+	left: -99999px;
+	font-size: 0;
+	color: #fff;
+	pointer-events: none;
+	& > svg {
+		width: 16px;
+		height: 16px;
+	}
+}
+
+.inspector-ruler-distance {
+	position: fixed;
+	top: -99999px;
+	left: -99999px;
+	padding: 0 4px;
+	font-family: monospace;
+	font-size: 12px;
+	border-radius: 2px;
+	text-align: center;
+	color: #fff;
+	pointer-events: none;
+	background-color: black;
+}
+
+
+.three-inspector-user-data-error-message {
+	margin: 6px auto;
+	font-size: 12px;
+	color: #ff4d4f;
+}
+
+.three-inspector-button {
+	display: block;
+ 	width: 100%;
+	margin: 6px auto;
+	height: 30px;
+	line-height: 20px;
+}

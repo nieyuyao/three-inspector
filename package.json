@@ -1,0 +1,30 @@
+{
+  "name": "@simple-threejs-devtool/main",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+	"type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite example"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.60",
+    "@types/react-dom": "^18.2.19",
+    "@types/three": "^0.161.2",
+    "@vitejs/plugin-react": "^4.2.1",
+    "sass": "^1.72.0",
+    "three": "^0.161.0",
+    "vite": "^5.1.4",
+    "vite-plugin-svgr": "^4.2.0"
+  }
+}
