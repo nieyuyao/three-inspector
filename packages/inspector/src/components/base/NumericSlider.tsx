@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Line } from './Line'
-import Slider from 'antd/es/slider'
+import { Slider } from '@arco-design/web-react'
 import { Nullable } from '../../types'
 
 interface Props {
@@ -17,8 +17,6 @@ export const NumericSlider = (props: Props) => {
 	const [value, setValue] = useState(props.value)
 	const lineRef = useRef<Nullable<HTMLDivElement>>(null)
 
-	const [tooltipOpen, toggleTooltipOpen] = useState(false)
-
 	useEffect(() => {
 		setValue(props.value)
 	}, [props])
@@ -27,12 +25,6 @@ export const NumericSlider = (props: Props) => {
 		if (props.onChange) {
 			props.onChange(val)
 		}
-	}
-	const onFocus = () => {
-		toggleTooltipOpen(true)
-	}
-	const onBlur = () => {
-		toggleTooltipOpen(false)
 	}
 	return (
 		<Line label={props.name} ref={lineRef}>
@@ -43,13 +35,8 @@ export const NumericSlider = (props: Props) => {
 				step={step}
 				value={value}
 				onChange={onChange}
-				onFocus={onFocus}
-				onBlur={onBlur}
-				tooltip={{
-					open: tooltipOpen,
-					getPopupContainer() {
-						return lineRef.current || document.body
-					},
+				getTooltipContainer={() => {
+					return lineRef.current || document.body
 				}}
 			/>
 		</Line>

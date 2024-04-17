@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react'
 import { Sprite, type Light, SpriteMaterial, Texture } from 'three'
 import { Visibility } from './Visibility'
-import { SVGComponent } from '../base/SVGComponent'
-import { defaultIconColor, grayIconColor } from '../../constants'
+import IconLocation from '../../assets/icons/location.svg?react'
 import lightIcon from '../../assets/imgs/light.png'
 import { CommandsContainer } from './CommandsContainer'
 import { GlobalContext, globalContext } from '../../global-context'
@@ -16,8 +15,12 @@ export const LightCommands = (props: Props) => {
 	const { scene } = useContext<GlobalContext>(globalContext)
 	const [lightPosVisible, setLightPosVisible] = useState(false)
 	const toggleLightPosition = useCallback(() => {
-		setLightPosVisible(!lightPosVisible)
 		if (!scene) {
+			return
+		}
+		setLightPosVisible(!lightPosVisible)
+		if (lightPosVisible) {
+			scene.getObjectByName('InspectorLightPositionSprite')?.removeFromParent()
 			return
 		}
 		const icon = new Image()
@@ -33,11 +36,11 @@ export const LightCommands = (props: Props) => {
 	}, [scene, lightPosVisible])
 	return (
 		<CommandsContainer>
-			<SVGComponent
-				name="location"
+			<IconLocation
+				className='three-inspector-icon'
+				color={lightPosVisible ? 'var(--base-command-icon-selected-color)' : 'var(--base-command-icon-color)'}
 				onClick={toggleLightPosition}
-				color={lightPosVisible ? defaultIconColor : grayIconColor}
-			></SVGComponent>
+			/>
 			<Visibility visible={false} style={{ margin: '0 6px' }} />
 		</CommandsContainer>
 	)

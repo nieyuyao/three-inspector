@@ -13,10 +13,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@ant-design/icons": "^5.3.1",
+    "@arco-design/web-react": "2.61.3",
     "@emotion/cache": "^11.11.0",
     "@rollup/plugin-image": "^3.0.3",
-    "antd": "^5.15.3",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0"

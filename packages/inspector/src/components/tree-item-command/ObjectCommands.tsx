@@ -2,21 +2,26 @@ import React, { useContext } from 'react'
 import { LineSegments, WireframeGeometry } from 'three'
 import type { Group, Mesh, Object3D } from 'three'
 import { Visibility } from './Visibility'
-import WireFrame from '@ant-design/icons/GlobalOutlined'
 import { CommandsContainer } from './CommandsContainer'
 import { useState } from 'react'
 import { globalContext } from '../../global-context'
 import { useRef } from 'react'
 import { Nullable } from '../../types'
-import { SVGComponent } from '../base/SVGComponent'
+import IconBSphere from '../../assets/icons/bsphere.svg?react'
+import IconWireframe from '../../assets/icons/wireframe.svg?react'
+import IconAxes from '../../assets/icons/axes.svg?react'
+import IconBBox from '../../assets/icons/bbox.svg?react'
 import { LocalAxesHelper } from '../../helpers/LocalAxes'
 import { isMesh } from '../../utils/object'
 import { BoundingSphere } from '../../helpers/BoundingSphere'
 import { BoundingBox } from '../../helpers/BoundingBox'
-import { defaultIconColor, grayIconColor } from '../../constants'
 
 interface Props {
 	object: Mesh | Group | Object3D
+}
+
+const getColor = (visible: boolean) => {
+	return visible ? 'var(--base-command-icon-selected-color)' : 'var(--base-command-icon-color)'
 }
 
 const wireframeObject = (target: Mesh): LineSegments => {
@@ -58,7 +63,7 @@ export const ObjectCommands = (props: Props) => {
 		}
 	}
 
-	const onVisibilityChanged = (visible: boolean) => object.visible = visible
+	const onVisibilityChanged = (visible: boolean) => (object.visible = visible)
 
 	const toggleBSphere = () => {
 		setBSphereVisible(!bSphereVisible)
@@ -76,30 +81,51 @@ export const ObjectCommands = (props: Props) => {
 		if (!object) {
 			return
 		}
-		if (!bSphereVisible) {
+		if (!bboxVisible) {
 			object.add(new BoundingBox(object as Mesh))
 		} else {
 			object.getObjectByName('InspectorBoundBox')?.removeFromParent()
 		}
 	}
+
 	return (
 		<CommandsContainer>
 			{isMesh(object) && (
-				<WireFrame
-					style={{ margin: '0 6px', color: wireframeVisible ? defaultIconColor : grayIconColor }}
+				<IconWireframe
+					color={getColor(wireframeVisible)}
+					className="three-inspector-icon"
+					style={{
+						margin: '0 6px',
+					}}
 					onClick={toggleWireframe}
 				/>
 			)}
 			{isMesh(object) && (
-				<SVGComponent name="axes" color={axesVisible ? defaultIconColor : grayIconColor} onClick={toggleAxes} />
+				<IconAxes
+					className="three-inspector-icon"
+					onClick={toggleAxes}
+					color={getColor(axesVisible)}
+				/>
 			)}
 			{isMesh(object) && (
-				<SVGComponent name="bsphere" color={bSphereVisible ? defaultIconColor : grayIconColor} onClick={toggleBSphere} />
+				<IconBSphere
+					className="three-inspector-icon"
+					onClick={toggleBSphere}
+					color={getColor(bSphereVisible)}
+				/>
 			)}
 			{isMesh(object) && (
-				<SVGComponent name="bbox" color={bboxVisible ? defaultIconColor : grayIconColor} onClick={toggleBBox} />
+				<IconBBox
+					className="three-inspector-icon"
+					onClick={toggleBBox}
+					color={getColor(bboxVisible)}
+				/>
 			)}
-			<Visibility visible={object.visible} onChange={onVisibilityChanged} style={{ margin: '0 6px' }} />
+			<Visibility
+				visible={object.visible}
+				onChange={onVisibilityChanged}
+				style={{ margin: '0 6px' }}
+			/>
 		</CommandsContainer>
 	)
 }

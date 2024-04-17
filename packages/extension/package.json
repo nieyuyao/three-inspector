@@ -10,6 +10,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@simple-threejs-devtool/inspector": "workspace:^1.0.0"
+    "@simple-threejs-devtool/inspector": "workspace:^0.0.1"
   }
 }

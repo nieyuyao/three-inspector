@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Input from 'antd/es/input'
+import { Input } from '@arco-design/web-react'
 import { isReadonly } from '../../utils/prop'
 import { Line } from './Line'
 
@@ -12,11 +12,10 @@ interface Props {
 export const TextInputComponent = (props: Props) => {
 	const { name, object } = props
 	const [value, setValue] = useState(object[name])
-	const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-		const val = event.target.value
-		const newVal = typeof value === 'number' ? Number(val) : val
+	const onChange = useCallback((value: string) => {
+		const newVal = typeof value === 'number' ? Number(value) : value
 		setValue(newVal)
-		props.onChange?.(name, typeof value === 'number' ? Number(val) : val)
+		props.onChange?.(name, typeof value === 'number' ? Number(value) : value)
 	}, [props.name])
 
 	useEffect(() => {

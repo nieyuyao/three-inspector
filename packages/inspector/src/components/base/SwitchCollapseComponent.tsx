@@ -1,6 +1,5 @@
 import React, { useState, type ReactNode, useEffect } from 'react'
-import Collapse from 'antd/es/collapse'
-import Switch from 'antd/es/switch'
+import { Collapse, Switch } from '@arco-design/web-react'
 import styled from '@emotion/styled'
 
 interface Props {
@@ -21,11 +20,29 @@ const Container = styled.div`
 		display: flex;
 		justify-content: space-between;
 	}
-	.panel > .ant-collapse-header {
-		display: none !important;
+	.arco-collapse  {
+		margin: 0 !important;
 	}
-	.panel > .ant-collapse-content > .ant-collapse-content-box {
-		padding: 4px !important;
+
+	.panel {
+		.arco-collapse-item-header {
+			font-size: var(--base-font-size);
+			color: var(--base-font-color) !important;
+			background-color: #303030;
+			border: none;
+			padding: 0;
+		}
+
+		.arco-collapse-item-content {
+			padding: 0 6px !important;
+			font-size: var(--base-font-size);
+			color: var(--base-font-color) !important;
+			background-color: var(--base-tab-grid-bg-color);
+		}
+
+		.arco-collapse-item-content-box {
+			padding: 6px !important;
+		}
 	}
 `
 
@@ -45,10 +62,10 @@ export const SwitchCollapseComponent = (props: Props) => {
 				<div>{props.label}</div>
 				<Switch size="small" checked={switchChecked} onChange={toggleChecked}/>
 			</div>
-			<Collapse bordered={false} activeKey={activeKey}>
-				<Collapse.Panel className='panel' header={null} showArrow={false} key={props.label} forceRender>
-					{props.children}
-				</Collapse.Panel>
+			<Collapse bordered={false} activeKey={activeKey} lazyload={false} >
+				<Collapse.Item className='panel' name={props.label} header={null} showExpandIcon={false} key={props.label}>
+					{ props.children }
+				</Collapse.Item>
 			</Collapse>
 		</Container>
 	)

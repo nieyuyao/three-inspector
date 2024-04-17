@@ -10,7 +10,7 @@ export const Container = styled.div`
 `
 
 export const CommandsContainer = (props: { children: ReactNode }) => {
-	return <Container>
+	return <Container className='commands'>
 		{ props.children }
 	</Container>
 }

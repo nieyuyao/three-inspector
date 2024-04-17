@@ -5,8 +5,8 @@ import { Nullable } from './types'
 import styled from '@emotion/styled'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
-import CloseOutlinedIcon from '@ant-design/icons/CloseOutlined'
-import { SVGComponent } from './components/base/SVGComponent'
+import { IconClose } from '@arco-design/web-react/icon'
+import IconPopup from './assets/icons/popup.svg?react'
 import { SceneExplore } from './SceneExplore'
 import { ActionTabs } from './ActionTabs'
 
@@ -163,10 +163,8 @@ export const InspectorPanel = (props: InspectorPanelProps) => {
 							<div className="header">
 								<div className="title">INSPECTOR</div>
 								<div className="actions">
-									<SVGComponent className="action popup" name="popup" onClick={openPopup} />
-									<div className="action close" onClick={closePanel}>
-										<CloseOutlinedIcon />
-									</div>
+									<IconPopup className="action popup" color='#fff' onClick={openPopup} />
+									<IconClose className="action close" onClick={closePanel} />
 								</div>
 							</div>
 							<div className="content">

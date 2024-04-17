@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Input from 'antd/es/input'
+import { Input } from '@arco-design/web-react'
 import { isReadonly } from '../../utils/prop'
 import { Line } from './Line'
 
@@ -14,9 +14,9 @@ interface Props {
 export const NumericInputComponent = (props: Props) => {
 	const { name, object } = props
 	const [value, setValue] = useState(object[name])
-	const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-		let val = Number(event.target.value)
-		setValue(event.target.value)
+	const onChange = useCallback((value: string) => {
+		let val = Number(value)
+		setValue(value)
 		if (isNaN(val)) {
 			return
 		}

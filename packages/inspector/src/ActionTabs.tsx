@@ -1,15 +1,13 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import Tabs from 'antd/es/tabs'
-import type { TabsProps } from 'antd'
-import AlignLeftOutlined from '@ant-design/icons/AlignLeftOutlined'
-import BugOutlined from '@ant-design/icons/BugOutlined'
-import ToolOutlined from '@ant-design/icons/ToolOutlined'
-import PieChartOutlined from '@ant-design/icons/PieChartOutlined'
+import { Tabs } from '@arco-design/web-react'
+import { IconBug, IconTool } from '@arco-design/web-react/icon'
 import { Properties } from './components/tabs/Properties'
 import { Debug } from './components/tabs/Debug'
 import { Tools } from './components/tabs/Tools'
 import { Statistic } from './components/tabs/Statistic'
+import IconProps from './assets/icons/props.svg?react'
+import IconStatistic from './assets/icons/statistic.svg?react'
 
 const Container = styled.div`
 	position: relative;
@@ -37,7 +35,8 @@ const Container = styled.div`
 		pointer-events: none;
 	}
 
-	.ant-tabs {
+	// tabs
+	.arco-tabs {
 		position: absolute;
 		top: 4px;
 		left: 0;
@@ -47,59 +46,76 @@ const Container = styled.div`
 		background-color: #303030;
 	}
 
-	.ant-tabs-content-holder {
+	.arco-tabs-content {
 		padding: 0 6px;
+		height: 100%;
 		overflow: auto;
 	}
 
-	.ant-tabs-nav {
-		margin-bottom: 8px;
-	}
-
-	.ant-tabs-nav-operations {
-		display: none !important;
-	}
-
-	.ant-tabs-nav-list {
+	.arco-tabs-header {
+		display: flex;
 		width: 100%;
-	}
-
-	.ant-tabs-tab {
-		flex: 1;
-		padding: 6px 4px;
-		margin: 0 !important;
-		font-size: var(--base-font-size);
-		color: var(--base-font-color);
-		.ant-tabs-tab-icon {
-			margin-inline-end: 6px !important;
+		.arco-icon-hover {
+			display: none;
 		}
 	}
+
+	.arco-tabs-header-ink {
+		background-color: #fff;
+	}
+
+	.arco-tabs-header-title {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		padding: 6px;
+		color: var(--base-gray-font-color);
+		&:hover {
+			.arco-tabs-header-title-text::before {
+				background-color: transparent !important;
+			}
+		}
+		&.arco-tabs-header-title-active {
+			color: var(--base-font-color);
+		}
+		.tab-title-icon {
+			width: 26px;
+			height: 26px;
+		}
+		.arco-tabs-header-title-text {
+			display: inline-flex;
+			align-items: center;
+			margin: 0 !important;
+			font-size: var(--base-font-size);
+			color:
+			.arco-tabs-tab-icon {
+				margin-inline-end: 6px !important;
+			}
+		}
+	}
+
 `
 
-const tabs: TabsProps['items'] = [
+const tabs = [
 	{
 		key: 'Properties',
-		label: 'Properties',
+		title: <IconProps className='tab-title-icon' />,
 		children: <Properties />,
-		icon: <AlignLeftOutlined />,
 	},
 	{
 		key: 'Debug',
-		label: 'Debug',
+		title: <IconBug className='tab-title-icon' />,
 		children: <Debug />,
-		icon: <BugOutlined />,
 	},
 	{
 		key: 'Tools',
-		label: 'Tools',
+		title: <IconTool className='tab-title-icon' />,
 		children: <Tools />,
-		icon: <ToolOutlined />,
 	},
 	{
 		key: 'Statistic',
-		label: 'Statistic',
+		title: <IconStatistic className='tab-title-icon' />,
 		children: <Statistic />,
-		icon: <PieChartOutlined />,
 	},
 ]
 
@@ -112,7 +128,13 @@ export const ActionTabs = (props: Props) => {
 		<Container className={props.className}>
 			<div className="resize-vertical" />
 			<div className="resize-vertical-line" />
-			<Tabs defaultActiveKey="Properties" items={tabs} />
+			<Tabs defaultActiveTab="Properties">
+				{tabs.map((tab) => (
+					<Tabs.TabPane destroyOnHide key={tab.key} title={tab.title}>
+						{tab.children}
+					</Tabs.TabPane>
+				))}
+			</Tabs>
 		</Container>
 	)
 }

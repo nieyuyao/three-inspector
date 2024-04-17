@@ -1,8 +1,8 @@
-import React, { type ReactNode, type MouseEvent } from 'react'
-import Button from 'antd/es/button'
+import React, { type ReactNode } from 'react'
+import { Button } from '@arco-design/web-react'
 
 interface Props {
-	onClick?: (event: MouseEvent) => void
+	onClick?: (event: Event) => void
 	children?: ReactNode
 }
 

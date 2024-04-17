@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Switch from 'antd/es/switch'
+import { Switch } from '@arco-design/web-react'
 import { Line } from './Line'
 
 interface Props {

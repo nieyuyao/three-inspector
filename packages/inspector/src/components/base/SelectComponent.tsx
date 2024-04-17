@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Line } from './Line'
-import Select, { type SelectProps } from 'antd/es/select'
+import { Select, SelectProps } from '@arco-design/web-react'
 import { Nullable } from '../../types'
 
 interface Props {

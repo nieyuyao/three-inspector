@@ -1,5 +1,5 @@
-import React, { useState, type ChangeEvent, useCallback, useEffect } from 'react'
-import Input, { type InputProps }  from 'antd/es/input'
+import React, { useState, useCallback, useEffect } from 'react'
+import { Input, type InputProps }  from '@arco-design/web-react'
 
 interface Props {
 	placeholder: string
@@ -12,12 +12,12 @@ interface Props {
 export const TextAreaComponent = (props: Props) => {
 	const [text, setText] = useState('')
 
-	const onChange = useCallback((ev: ChangeEvent<HTMLTextAreaElement>) => {
-		if (text === ev.target.value) {
+	const onChange = useCallback((value: string) => {
+		if (text === value) {
 			return
 		}
-		setText(ev.target.value)
-		props.onChange?.(ev.target.value)
+		setText(value)
+		props.onChange?.(value)
  	}, [text])
 
 	useEffect(() => {

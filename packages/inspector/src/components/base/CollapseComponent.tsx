@@ -1,13 +1,11 @@
 import React, { useState, type CSSProperties } from 'react'
-import type { CollapseProps } from 'antd'
-import Collapse from 'antd/es/collapse'
+import { Collapse } from '@arco-design/web-react'
 import styled from '@emotion/styled'
 
 interface Props {
 	label: string
 	defaultOpened?: boolean
 	children?: React.ReactNode
-	onChange?: CollapseProps['onChange']
 }
 
 export const CollapseContainer = styled.div`
@@ -16,20 +14,27 @@ export const CollapseContainer = styled.div`
 		padding: 0 4px;
 	}
 
-	.ant-collapse  {
+	.arco-collapse  {
 		margin: 0 !important;
 	}
-	.ant-collapse-header {
+
+	.arco-collapse-item-header {
+		padding-top: 6px;
+		padding-bottom: 6px;
 		font-size: var(--base-font-size);
 		color: var(--base-font-color) !important;
-		padding: 0 6px !important;
-		.ant-collapse-header-text {
-			height: 22px;
-			line-height: 22px;
-		}
+		background-color: #303030;
+		border: none;
 	}
 
-	.ant-collapse-content-box {
+	.arco-collapse-item-content {
+		padding: 0 6px !important;
+		font-size: var(--base-font-size);
+		color: var(--base-font-color) !important;
+		background-color: #303030;
+	}
+
+	.arco-collapse-item-content-box {
 		padding: 6px !important;
 	}
 `
@@ -40,22 +45,18 @@ const styles: CSSProperties = {
 }
 
 export const CollapseComponent = (props: Props) => {
-	const [activeKey, setActiveKey] = useState(props.defaultOpened ? props.label : undefined)
-	const onChange = (key: string | string[]) => {
-		setActiveKey(Array.isArray(key) ? key[0] : key)
-		props.onChange?.(Array.isArray(key) ? key[0] : key)
-	}
+	const [defaultActiveKey] = useState(props.defaultOpened ? props.label : undefined)
 	return (
 		<CollapseContainer>
 			<Collapse
-				activeKey={activeKey}
+				defaultActiveKey={defaultActiveKey}
 				bordered={false}
 				style={styles}
-				onChange={onChange}
+				lazyload={false}
 			>
-				<Collapse.Panel header={props.label} key={props.label} forceRender>
+				<Collapse.Item header={props.label} name={props.label}>
 					{ props.children }
-				</Collapse.Panel>
+				</Collapse.Item>
 			</Collapse>
 		</CollapseContainer>
 	)

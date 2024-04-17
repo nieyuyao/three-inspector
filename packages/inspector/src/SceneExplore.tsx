@@ -1,15 +1,19 @@
-import React, { useCallback, useContext, type ChangeEvent, useMemo, useState, useEffect } from 'react'
+import React, { useCallback, useContext, useMemo, useState, useEffect, ReactNode } from 'react'
 import { Scene, Object3D, Group, Light } from 'three'
-import Tree, { DataNode, TreeProps } from 'antd/es/tree'
-import { DownOutlined } from '@ant-design/icons'
-import { GlobalContext, GlobalUtilsContext, globalUtilsContext, globalContext } from './global-context'
+import { Tree, TreeProps, Input } from '@arco-design/web-react'
+import { TreeDataType } from '@arco-design/web-react/es/Tree/interface'
+import {
+	GlobalContext,
+	GlobalUtilsContext,
+	globalUtilsContext,
+	globalContext,
+} from './global-context'
 import { ObjectCommands } from './components/tree-item-command/ObjectCommands'
-import Search from 'antd/es/input/Search'
 import { SceneCommands } from './components/tree-item-command/SceneCommands'
 import styled from '@emotion/styled'
-import { SVGComponent } from './components/base/SVGComponent'
+import IconBox from './assets/icons/box.svg?react'
 import { isMesh, isGroup, isScene, isObject3D, isLight } from './utils/object'
-import { LightCommands } from './components/tree-item-command/LightComands'
+import { LightCommands } from './components/tree-item-command/LightCommands'
 
 const ExploreContainer = styled.div`
 	flex: 1;
@@ -21,54 +25,74 @@ const ExploreContainer = styled.div`
 	overflow-y: auto;
 	box-sizing: border-box;
 
-	.ant-input-group-wrapper {
+	// input
+	.arco-input-group-wrapper {
 		padding-top: 6px !important;
 		padding-bottom: 6px !important;
+		height: 36px;
 		background-color: #303030 !important;
-
-		.ant-input-affix-wrapper {
-			border: none;
-		}
+		box-sizing: border-box;
 
 		input {
-			font-size: 12px;
+			font-size: var(--base-font-size);
 			height: 24px;
 		}
 	}
-	.ant-tree-list {
-		padding: 0 6px;
-		color: var(--base-font-color);
-		.ant-tree-treenode-motion {
-			width: 100%;
-		}
 
-		.ant-tree-treenode {
+	// tree
+	.arco-tree {
+		padding: 0 6px;
+
+		.arco-tree-node {
+			position: relative;
 			width: 100%;
 			padding-top: 4px;
 		}
 
-		.ant-tree-node-content-wrapper {
-			width: calc(100% - 24px);
+		.arco-tree-node-switcher {
+			color: var(--base-font-color);
 		}
 
-		.ant-tree-treenode-selected {
+		.arco-tree-node-title {
+			width: 100%;
+			display: inline-flex;
+			align-items: center;
+			font-size: var(--base-font-size);
+			color: var(--base-font-color);
+		}
+
+		.arco-tree-node-selected {
+			border-radius: 0;
 			background-color: rgba(230, 244, 255, 0.1);
 		}
 
-		.ant-tree-node-selected {
-			border-radius: 0;
-			background-color: transparent !important;
+		.arco-tree-node-title:hover {
+			background-color: transparent;
 		}
 
-		.ant-tree-title {
-			display: flex;
-			align-items: center;
-			width: 100%;
+		.arco-tree-node-icon {
+			margin-right: 4px;
 		}
+
+		.arco-tree-node-icon-hover::before {
+			background-color: transparent;
+		}
+	}
+
+	.commands {
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
 	}
 `
 
-type TreeDataNode = DataNode & { name: string; children: TreeDataNode[]; key: string }
+type TreeDataNode = TreeDataType & {
+	key: string
+	children: TreeDataNode[]
+	commands: ReactNode
+	name: string
+}
 
 const getObjectName = (object: Object3D) => {
 	if ((object as Group).isGroup) {
@@ -80,12 +104,11 @@ const getObjectName = (object: Object3D) => {
 	return object.name || `Object-${object.id}`
 }
 
-
 const renderCommands = (object: Object3D) => {
 	if (isScene(object)) {
 		return <SceneCommands scene={object} />
 	} else if (isLight(object)) {
-		return <LightCommands light={object}/>
+		return <LightCommands light={object} />
 	} else if (isMesh(object) || isGroup(object) || isObject3D(object)) {
 		return <ObjectCommands object={object} />
 	}
@@ -94,41 +117,54 @@ const renderCommands = (object: Object3D) => {
 
 const renderIcon = (object: Object3D) => {
 	if (isMesh(object)) {
-		return <SVGComponent name="box" width={10} height={10} color="rgba(255, 255, 255, 0.6)" style={{marginTop: '-2px'}} />
+		return (
+			<IconBox
+				name="box"
+				width={10}
+				height={10}
+				style={{ marginTop: '-2px' }}
+			/>
+		)
 	}
 	if (isLight(object)) {
-		return <SVGComponent name="light" width={10} height={10} color="rgba(255, 255, 255, 0.6)" style={{marginTop: '-2px'}}/>
+		return (
+			<IconBox
+				name="light"
+				width={10}
+				height={10}
+				style={{ marginTop: '-2px' }}
+			/>
+		)
 	}
 	return null
 }
 
-const buildTreeData = (object: Object3D): TreeDataNode => {
+const genTreeData = (object: Object3D): TreeDataNode => {
 	const children: TreeDataNode[] = []
 	if (object.children && object.children.length) {
 		object.children.forEach((ch) => {
 			if (ch.name.includes('Inspector')) {
 				return
 			}
-			children.push(buildTreeData(ch))
+			children.push(genTreeData(ch))
 		})
 	}
 	const name = (object as Scene).isScene ? 'Scene' : getObjectName(object)
 	object.name = name
 	return {
 		key: `${object.id}`,
-		name: name.toLowerCase(),
-		title: (
-			<>
-				{renderIcon(object)}
-				<span style={{ fontSize: 'var(--base-font-size)' }}>{name}</span>
-				{renderCommands(object)}
-			</>
-		),
+		name,
+		title: name,
 		children,
+		icon: renderIcon(object),
+		commands: renderCommands(object),
 	}
 }
 
-const search = (text: string, tree: TreeDataNode[]): { tree: TreeDataNode[]; expandKeys: string[] } => {
+const search = (
+	text: string,
+	tree: TreeDataNode[]
+): { tree: TreeDataNode[]; expandKeys: string[] } => {
 	const expandKeys: string[] = []
 	const dfsTree = (tree: TreeDataNode[]) => {
 		const newTree: TreeDataNode[] = []
@@ -136,7 +172,7 @@ const search = (text: string, tree: TreeDataNode[]): { tree: TreeDataNode[]; exp
 			let added = false
 			const node = tree[i]
 			const cloned: TreeDataNode = { ...node, children: [] }
-			if (node.name.includes(text)) {
+			if (node.name.toLowerCase().includes(text)) {
 				newTree.push(cloned)
 				added = true
 				expandKeys.push(node.key)
@@ -168,7 +204,7 @@ export const SceneExplore = (props: Props) => {
 	const [treeData, setTreeData] = useState<TreeDataNode[]>([])
 
 	const rawTreeData = useMemo(() => {
-		return scene ? [buildTreeData(scene)] : []
+		return scene ? [genTreeData(scene)] : []
 	}, [scene])
 
 	const resetTree = useCallback(() => {
@@ -182,9 +218,9 @@ export const SceneExplore = (props: Props) => {
 		resetTree()
 	}, [scene, resetTree])
 
-	const onSearch = useCallback(
-		(event: ChangeEvent<HTMLInputElement>) => {
-			const text = event.target.value.toLowerCase()
+	const onEnter = useCallback(
+		(value: string) => {
+			const text = value.toLowerCase()
 			if (!text) {
 				resetTree()
 				return
@@ -198,11 +234,11 @@ export const SceneExplore = (props: Props) => {
 	)
 
 	const handleSelect = useCallback<NonNullable<TreeProps['onSelect']>>(
-		(keys: string[], info) => {
+		(keys: string[], extra) => {
 			if (!scene || treeData.length <= 0) {
 				return
 			}
-			const key = info.node.key as string
+			const key = extra.node.key as string
 			if (selectedKeys[0] === key) {
 				return
 			}
@@ -222,21 +258,27 @@ export const SceneExplore = (props: Props) => {
 
 	return (
 		<ExploreContainer className={props.className}>
-			<Search
+			<Input.Search
 				size="small"
 				allowClear
-				onChange={onSearch}
 				style={{ width: '100%', padding: '0 12px', backgroundColor: '#1d1d1d', color: 'white' }}
+				onPressEnter={(e) => {
+					const value = (e.target as HTMLInputElement).value
+					onEnter(value)
+				}}
+				onClear={() => onEnter('')}
 			/>
-			<Tree
-				switcherIcon={<DownOutlined />}
-				treeData={treeData}
-				onSelect={handleSelect}
-				onExpand={handleExpand}
-				style={{ backgroundColor: '#333' }}
-				selectedKeys={selectedKeys}
-				expandedKeys={expandedKeys}
-			/>
+			{treeData.length ? (
+				<Tree
+					treeData={treeData}
+					onSelect={handleSelect}
+					onExpand={handleExpand}
+					style={{ backgroundColor: '#333' }}
+					selectedKeys={selectedKeys}
+					expandedKeys={expandedKeys}
+					renderExtra={(node) => node.dataRef?.commands}
+				/>
+			) : null}
 		</ExploreContainer>
 	)
 }

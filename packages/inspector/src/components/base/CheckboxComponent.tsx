@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Checkbox, { type CheckboxChangeEvent } from 'antd/es/checkbox'
+import { Checkbox } from '@arco-design/web-react'
 import { Line } from './Line'
 
 interface Props {
@@ -12,10 +12,10 @@ interface Props {
 export const CheckboxComponent = (props: Props) => {
 	const { checked } = props
 	const [ innerChecked, setInnerChecked ] = useState(checked)
-	const handleChange = (e: CheckboxChangeEvent) => {
+	const handleChange = (checked: boolean) => {
 		if (props.onChange) {
-			setInnerChecked(!!e.target.checked)
-			props.onChange(!!e.target.checked)
+			setInnerChecked(checked)
+			props.onChange(checked)
 		}
 	}
 

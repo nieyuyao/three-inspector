@@ -1,12 +1,11 @@
 import React, { type CSSProperties } from 'react'
-import UploadFile, { type UploadProps, type RcFile } from 'antd/es/upload'
 import styled from '@emotion/styled'
-import Button from 'antd/es/button'
+import { Button, Upload, UploadProps } from '@arco-design/web-react'
 
 interface Props {
 	text: string
 	style?: CSSProperties
-	onChange?: (file: RcFile) => void
+	onChange?: (file: File) => void
 }
 
 const UploadContainer = styled.div`
@@ -16,15 +15,15 @@ const UploadContainer = styled.div`
 `
 
 export const ImageUploadComponent = (props: Props) => {
-	const onBeforeUpload: UploadProps['beforeUpload'] = (file: RcFile) => {
+	const onBeforeUpload: UploadProps['beforeUpload'] = (file: File) => {
 		props.onChange?.(file)
 		return false
 	}
 	return (
 		<UploadContainer style={props.style}>
-			<UploadFile accept=".jpg,.png,.jpeg" beforeUpload={onBeforeUpload} showUploadList={false}>
+			<Upload accept=".jpg,.png,.jpeg" beforeUpload={onBeforeUpload} showUploadList={false}>
 				<Button>{props.text}</Button>
-			</UploadFile>
+			</Upload>
 		</UploadContainer>
 	)
 }

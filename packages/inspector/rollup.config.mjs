@@ -13,7 +13,7 @@ export default {
 		file: 'dist/index.js',
 		format: 'cjs',
 	},
-	external: ['react', 'react-dom', 'antd', 'react-colorful'],
+	external: ['react', 'react-dom', '@arco-design', 'react-colorful'],
 	plugins: [
 		image(),
 		typescript({

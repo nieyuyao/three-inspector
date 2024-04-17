@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { RgbaColorPicker, RgbColorPicker, type RgbaColor, type RgbColor } from 'react-colorful'
+import styled from '@emotion/styled'
 import { NumericInputComponent } from './NumericInputComponent'
 import { Line } from './Line'
-import styled from '@emotion/styled'
 import { Nullable } from '../../types'
 
 interface Props {

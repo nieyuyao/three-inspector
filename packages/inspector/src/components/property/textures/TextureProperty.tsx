@@ -8,7 +8,6 @@ import { ImageUploadComponent } from '../../base/ImageUploadComponent'
 import { TextLineComponent } from '../../base/TextLineComponent'
 import { SelectComponent } from '../../base/SelectComponent'
 import { CheckboxComponent } from '../../base/CheckboxComponent'
-import { type RcFile } from 'antd/es/upload'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
 
 interface Props {
@@ -92,7 +91,7 @@ export const TextureProperty = (props: Props) => {
 	}, [texture])
 
 	const onUpload = useCallback(
-		(file: RcFile) => {
+		(file: File) => {
 			const fr = new FileReader()
 			fr.onload = () => {
 				if (!fr.result) {

@@ -24,8 +24,6 @@ export class Inspector {
 
 	private static popupWindow: Nullable<Window & typeof globalThis> = null
 
-	private static originalElement: Nullable<(typeof globalThis)['HTMLElement']> = null
-
 	private static popupMode = false
 
 	private static options: Options = {}
@@ -44,7 +42,7 @@ export class Inspector {
 		if (!this.panelHostElement) {
 			let doc: Document
 			if (this.popupMode) {
-				this._createPopUp()
+				this.#createPopUp()
 				doc = this.popupWindow!.document
 			} else {
 				doc = window.document
@@ -66,7 +64,7 @@ export class Inspector {
 			onClose: () => {
 				this.destroy()
 				if (this.popupMode) {
-					this._closePopup()
+					this.#createPopUp()
 					this.popupMode = false
 					this.show(this.scene, this.camera, this.renderer, this.options)
 				}
@@ -77,12 +75,9 @@ export class Inspector {
 					this.popupMode = false
 					this.show(this.scene, this.camera, this.renderer, this.options)
 				} else {
-					this._createPopUp()
-					const popupDoc = this.popupWindow!.document
-					const ele = popupDoc.createElement('div')
-					ele.className = 'inspector-panel-container'
-					popupDoc.body.appendChild(ele)
-					this.show(this.scene, this.camera, this.renderer, { ...this.options, element: ele })
+					this.popupMode = true
+					this.#createPopUp()
+					this.show(this.scene, this.camera, this.renderer, this.options)
 				}
 			},
 		})
@@ -100,9 +95,8 @@ export class Inspector {
 	static refresh() {}
 
 	static destroy() {
-		const panelHostElement = this.panelHostElement
-		const ins = this.panelIns
-		this._removeAllInspectorObjects()
+		const { panelHostElement, panelIns: ins, popupMode } = this
+		this.#removeAllInspectorObjects()
 		this.panelIns = null
 		this.panelHostElement = null
 		setTimeout(() => {
@@ -113,19 +107,17 @@ export class Inspector {
 				panelHostElement.parentElement?.removeChild(panelHostElement)
 			}
 		}, 0)
-		if (this.popupMode) {
-			this._closePopup()
+		if (popupMode) {
+			this.#closePopup()
 		}
 	}
 
-	private static _closePopup() {
-		// reset window.HTMLElement
-		window.HTMLElement = this.originalElement!
+	static #closePopup() {
 		this.popupWindow!.close()
 		this.popupWindow = null
 	}
 
-	private static _removeAllInspectorObjects() {
+	static #removeAllInspectorObjects() {
 		const { scene } = this
 		if (!scene) {
 			return
@@ -139,25 +131,21 @@ export class Inspector {
 		})
 	}
 
-	private static _copyStyles(sourceDoc: Document, targetDoc: Document) {
+	static #copyStyles(sourceDoc: Document, targetDoc: Document) {
 		for (let index = 0; index < sourceDoc.styleSheets.length; index++) {
 			const styleSheet: any = sourceDoc.styleSheets[index]
-
 			try {
 				if (styleSheet.cssRules) {
 					// for <style> elements
 					const newStyleEl = sourceDoc.createElement('style')
-
 					for (const cssRule of styleSheet.cssRules) {
 						// write the text of each rule into the body of the style element
 						newStyleEl.appendChild(sourceDoc.createTextNode(cssRule.cssText))
 					}
-
 					targetDoc.head!.appendChild(newStyleEl)
 				} else if (styleSheet.href) {
 					// for <link> elements loading CSS from a URL
 					const newLinkEl = sourceDoc.createElement('link')
-
 					newLinkEl.rel = 'stylesheet'
 					newLinkEl.href = styleSheet.href
 					targetDoc.head!.appendChild(newLinkEl)
@@ -166,17 +154,14 @@ export class Inspector {
 		}
 	}
 
-	private static _createPopUp() {
+	static #createPopUp() {
 		const features = 'left=100,top=100,width=360,height=640'
 		const popupWindow = window.open('', 'INSPECTOR', features) as Window & typeof globalThis
 		const popupDocument = popupWindow?.document
 		if (!popupDocument) {
 			return
 		}
-		this.popupMode = true
 		this.popupWindow = popupWindow
-		this.originalElement = window.HTMLElement
-		window.HTMLElement = popupWindow.HTMLElement
-		this._copyStyles(window.document, popupDocument)
+		this.#copyStyles(window.document, popupDocument)
 	}
 }

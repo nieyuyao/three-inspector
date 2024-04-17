@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import EyeOutlined from '@ant-design/icons/EyeOutlined'
-import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined'
+import { IconEye } from '@arco-design/web-react/icon'
 
 export const Visibility = (
-	props: { visible?: boolean; onChange?: (visible: boolean) => void; style?: React.CSSProperties } = { visible: true }
+	props: {
+		visible?: boolean
+		onChange?: (visible: boolean) => void
+		style?: React.CSSProperties
+	} = { visible: true }
 ) => {
 	const [visible, setVisible] = useState(props.visible)
 	const handleClick = () => {
@@ -14,7 +17,13 @@ export const Visibility = (
 	}
 	return (
 		<div onClick={handleClick} style={props.style}>
-			{visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+			<IconEye
+				style={{
+					color: visible
+						? 'var(--base-command-icon-selected-color)'
+						: 'var(--base-command-icon-color)',
+				}}
+			/>
 		</div>
 	)
 }
