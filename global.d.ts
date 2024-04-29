@@ -1,4 +1,5 @@
 /// <reference types="vite-plugin-svgr/client" />
+/// <reference types="@types/three" />
 
 declare module '*.css' {
   const content: string

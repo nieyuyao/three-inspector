@@ -3,9 +3,8 @@ import * as THREE from 'three'
 import { Nullable } from '../packages/inspector/src/types'
 import styled from '@emotion/styled'
 import { Inspector } from '../packages/inspector/src'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import dogImgUrl from './assets/dog.jpg'
-
+import dragonBallImgUrl from './assets/dragon-ball.png'
 
 const Main = styled.div`
 	width: 100%;
@@ -19,17 +18,19 @@ export function App() {
 	const frameId = useRef<number>(0)
 
 	useEffect(() => {
+		window.THREE = THREE
 		if (!canvasRef.current) {
 			return
 		}
 		const canvas = canvasRef.current
 		const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 1, 1000)
-
     const renderer = new THREE.WebGLRenderer({ antialias: true, canvas, alpha: true })
+		renderer.setPixelRatio(window.devicePixelRatio)
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ color: 0xff00ff })
     const cube = new THREE.Mesh(geometry, material)
+		const axes = new THREE.AxesHelper(1000)
 
 		const texture = textureLoader.load(dogImgUrl)
 
@@ -39,11 +40,13 @@ export function App() {
 
 		const group = new THREE.Group()
 
-		group.add(cube)
+		// group.add(cube)
 
-		group.add(ball)
+		// group.add(ball)
 
 		scene.add(basicMatCube)
+
+		scene.add(axes)
 
 		ball.position.x = 2
 
@@ -51,14 +54,13 @@ export function App() {
 
 		cube.position.y = 1
 
-		camera.position.y = 10
+		camera.position.x = 0
+		camera.position.y = 0
 		camera.position.z = 10
 
 		camera.lookAt(new THREE.Vector3(0, 0, 0))
 
 		const light = new THREE.AmbientLight()
-
-		camera.lookAt(new THREE.Vector3())
 
 		scene.add(light)
 
@@ -73,9 +75,9 @@ export function App() {
 			camera.updateProjectionMatrix()
 		}
 
-		new OrbitControls(camera, renderer.domElement)
+		const img = new Image()
 
-
+		img.src = dragonBallImgUrl
 
 		Inspector.show(scene, camera, renderer, { measureDom: canvas.parentElement!})
 		const render = () => {

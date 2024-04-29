@@ -14,6 +14,7 @@ importers:
       react-dom: ^18.2.0
       sass: ^1.72.0
       three: ^0.161.0
+      threejs-navigator-gizmo: 0.0.1
       vite: ^5.1.4
       vite-plugin-svgr: ^4.2.0
     dependencies:
@@ -21,6 +22,7 @@ importers:
       '@emotion/styled': 11.11.0_mosnlhcp3dxtf2lcqc3n3mycxq
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      threejs-navigator-gizmo: 0.0.1
     devDependencies:
       '@types/react': 18.2.60
       '@types/react-dom': 18.2.19
@@ -47,9 +49,8 @@ importers:
       react-colorful: ^5.6.1
       react-dom: ^18.2.0
       rollup: ^4.13.0
+      threejs-navigator-gizmo: 0.0.1
       typescript: ^5.4.3
-      vite: ^5.1.4
-      vite-plugin-svgr: ^4.2.0
     dependencies:
       '@arco-design/web-react': 2.61.3_biqbaboplfbrettd7655fr4n2y
       '@emotion/cache': 11.11.0
@@ -57,12 +58,11 @@ importers:
       react: 18.2.0
       react-colorful: 5.6.1_biqbaboplfbrettd7655fr4n2y
       react-dom: 18.2.0_react@18.2.0
+      threejs-navigator-gizmo: 0.0.1
     devDependencies:
       '@rollup/plugin-typescript': 11.1.6_2e6zbsqjrjvt7owpn6wnh4ucya
       rollup: 4.13.0
       typescript: 5.4.3
-      vite: 5.1.4
-      vite-plugin-svgr: 4.2.0_mh4j3gldmm6nsvb4zmw2rymoqu
 
 packages:
 
@@ -938,20 +938,6 @@ packages:
       - typescript
     dev: true
 
-  /@svgr/core/8.1.0_typescript@5.4.3:
-    resolution: {integrity: sha512-8QqtOQT5ACVlmsvKOJNEaWmRPmcojMOzCz4Hs2BGG/toAp/K38LcsMRyLp349glq5AzJbCEeimEoxaX6v/fLrA==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@babel/core': 7.23.9
-      '@svgr/babel-preset': 8.1.0_@babel+core@7.23.9
-      camelcase: 6.3.0
-      cosmiconfig: 8.3.6_typescript@5.4.3
-      snake-case: 3.0.4
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-    dev: true
-
   /@svgr/hast-util-to-babel-ast/8.0.0:
     resolution: {integrity: sha512-EbDKwO9GpfWP4jN9sGdYwPBU0kdomaPIL2Eu4YwmgP+sJeXT+L7bMwJUBnhzfH8Q2qMBqZ4fJwpCyYsAN3mt2Q==}
     engines: {node: '>=14'}
@@ -968,7 +954,7 @@ packages:
     dependencies:
       '@babel/core': 7.23.9
       '@svgr/babel-preset': 8.1.0_@babel+core@7.23.9
-      '@svgr/core': 8.1.0_typescript@5.4.3
+      '@svgr/core': 8.1.0
       '@svgr/hast-util-to-babel-ast': 8.0.0
       svg-parser: 2.0.4
     transitivePeerDependencies:
@@ -1219,22 +1205,6 @@ packages:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
-    dev: true
-
-  /cosmiconfig/8.3.6_typescript@5.4.3:
-    resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      typescript: '>=4.9.5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      import-fresh: 3.3.0
-      js-yaml: 4.1.0
-      parse-json: 5.2.0
-      path-type: 4.0.0
-      typescript: 5.4.3
     dev: true
 
   /csstype/3.1.3:
@@ -1796,6 +1766,16 @@ packages:
     resolution: {integrity: sha512-LC28VFtjbOyEu5b93K0bNRLw1rQlMJ85lilKsYj6dgTu+7i17W+JCCEbvrpmNHF1F3NAUqDSWq50UD7w9H2xQw==}
     dev: true
 
+  /three/0.164.1:
+    resolution: {integrity: sha512-iC/hUBbl1vzFny7f5GtqzVXYjMJKaTPxiCxXfrvVdBi1Sf+jhd1CAkitiFwC7mIBFCo3MrDLJG97yisoaWig0w==}
+    dev: false
+
+  /threejs-navigator-gizmo/0.0.1:
+    resolution: {integrity: sha512-/hshSHt4ucQpPUNdCgCJUE2/HWGavktn3VEb0RAuOZreHX7N+7/N+EYP6Q8bTYgQyTGJTMm6Pr+pwCtfWBaliQ==}
+    dependencies:
+      three: 0.164.1
+    dev: false
+
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
@@ -1856,21 +1836,6 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /vite-plugin-svgr/4.2.0_mh4j3gldmm6nsvb4zmw2rymoqu:
-    resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}
-    peerDependencies:
-      vite: ^2.6.0 || 3 || 4 || 5
-    dependencies:
-      '@rollup/pluginutils': 5.1.0_rollup@4.13.0
-      '@svgr/core': 8.1.0_typescript@5.4.3
-      '@svgr/plugin-jsx': 8.1.0_@svgr+core@8.1.0
-      vite: 5.1.4
-    transitivePeerDependencies:
-      - rollup
-      - supports-color
-      - typescript
-    dev: true
-
   /vite-plugin-svgr/4.2.0_vite@5.1.4:
     resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}
     peerDependencies:
@@ -1884,41 +1849,6 @@ packages:
       - rollup
       - supports-color
       - typescript
-    dev: true
-
-  /vite/5.1.4:
-    resolution: {integrity: sha512-n+MPqzq+d9nMVTKyewqw6kSt+R3CkvF9QAKY8obiQn8g1fwTscKxyfaYnC632HtBXAQGc1Yjomphwn1dtwGAHg==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.19.12
-      postcss: 8.4.35
-      rollup: 4.13.0
-    optionalDependencies:
-      fsevents: 2.3.3
     dev: true
 
   /vite/5.1.4_sass@1.72.0:
