@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react'
 import type { Material, Texture } from 'three'
 import { TextureProperty } from '../textures/TextureProperty'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
-import { UVHelper } from '../../../debug/UVHelper'
+import { UVHelper } from '../../../helpers/UVHelper'
 import { SwitchComponent } from '../../base/SwitchComponent'
 import { Nullable } from '../../../types'
 import { upperLabel } from '../../../utils/label'
@@ -36,7 +36,7 @@ type TextureProp<T> = {
 	)
 	return (
 		<>
-			<SwitchComponent name="UV Debug" checked={false} onChange={toggleUvHelperVisible}></SwitchComponent>
+			<SwitchComponent name="UV Debug" checked={false} onChange={toggleUvHelperVisible} />
 			<TextureProperty texture={material[prop] as Texture} onTextureChanged={onTextureChanged} label={upperLabel(String(prop))} />
 		</>
 	)

@@ -9,6 +9,7 @@ import { IconClose } from '@arco-design/web-react/icon'
 import IconPopup from './assets/icons/popup.svg?react'
 import { SceneExplore } from './SceneExplore'
 import { ActionTabs } from './ActionTabs'
+import { INSPECTOR_PANEL_CLASS_NAME } from './utils/constants'
 
 export interface InspectorPanelProps {
 	scene: Scene
@@ -34,7 +35,7 @@ const PanelContainer = styled.div`
 	bottom: 0;
 	right: 0;
 	overflow: hidden;
-	z-index: 99999;
+	z-index: 9999;
 
 	.resize {
 		min-width: 360px;
@@ -156,7 +157,7 @@ export const InspectorPanel = (props: InspectorPanelProps) => {
 		<globalUtilsContext.Provider value={globalUtils.current}>
 			<globalContext.Provider value={globalState}>
 				<CacheProvider value={cache}>
-					<PanelContainer className={props.popupMode ? 'popup' : ''}>
+					<PanelContainer className={props.popupMode ? `${INSPECTOR_PANEL_CLASS_NAME} popup` : `${INSPECTOR_PANEL_CLASS_NAME}`}>
 						<div className="resize" />
 						<div className="resize-horizontal-line" />
 						<Panel className="panel">

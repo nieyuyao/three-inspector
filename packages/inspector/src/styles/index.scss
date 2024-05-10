@@ -1,47 +1,98 @@
 .inspector-ruler-icon {
-	position: fixed;
-	top: -99999px;
-	left: -99999px;
-	font-size: 0;
-	color: #fff;
-	pointer-events: none;
-	& > svg {
-		width: 16px;
-		height: 16px;
-	}
+  position: fixed;
+  top: -99999px;
+  left: -99999px;
+  font-size: 0;
+  color: #fff;
+  pointer-events: none;
+  & > svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .inspector-ruler-distance {
-	position: fixed;
-	top: -99999px;
-	left: -99999px;
-	padding: 0 4px;
-	font-family: monospace;
-	font-size: 12px;
-	border-radius: 2px;
-	text-align: center;
-	color: #fff;
-	pointer-events: none;
-	background-color: black;
+  position: fixed;
+  top: -99999px;
+  left: -99999px;
+  padding: 0 4px;
+  font-family: monospace;
+  font-size: 12px;
+  border-radius: 2px;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+  background-color: black;
 }
 
-
 .three-inspector-user-data-error-message {
-	margin: 6px auto;
-	font-size: 12px;
-	color: #ff4d4f;
+  margin: 6px auto;
+  font-size: 12px;
+  color: #ff4d4f;
 }
 
 .three-inspector-button {
-	display: block;
- 	width: 100%;
-	margin: 6px auto;
-	height: 30px;
-	line-height: 20px;
+  display: block;
+  width: 100%;
+  margin: 6px auto;
+  height: 30px;
+  line-height: 20px;
 }
 
 .three-inspector-icon {
-	width: 14px;
-	height: 14px;
-	margin-right: 4px;
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
+
+.inspector-panel-container {
+  .arco-trigger {
+    z-index: 10000;
+  }
+
+  .color-picker {
+    .color-picker-mask {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .color-picker-content {
+      position: absolute;
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      background-color: #181818;
+
+      .preset {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 100%;
+        margin: 6px 0 8px 6px;
+        .colourless {
+          position: relative;
+          background-color: white;
+          &:after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: -3px;
+            width: 28px;
+            height: 1px;
+            background-color: red;
+            transform: rotate(45deg);
+          }
+        }
+        .preset-color {
+          width: 22px;
+          height: 22px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
 }

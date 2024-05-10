@@ -3,13 +3,13 @@ import { createRoot, type Root } from 'react-dom/client'
 import type { Scene, Camera, WebGLRenderer } from 'three'
 import { type InspectorPanelProps, InspectorPanel } from './InspectorPanel'
 import { Nullable } from './types'
+import { INSPECTOR_CLASS_NAME } from './utils/constants'
 
 interface Options {
 	element?: HTMLElement
 	measureDom?: HTMLElement
 }
 
-const INSPECTOR_CLASS_NAME = 'inspector-panel-container'
 
 export class Inspector {
 	private static panelIns: Nullable<Root> = null

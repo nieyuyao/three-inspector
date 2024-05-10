@@ -3,11 +3,13 @@ import { PerspectiveCamera } from 'three'
 import { NavigatorGizmo } from 'threejs-navigator-gizmo'
 import { ButtonComponent } from '../base/ButtonComponent'
 import { GlobalContext, globalContext } from '../../global-context'
-import { Measure } from '../../tools/Measure'
+import { Measure } from '../../helpers/Measure'
 import { Nullable } from '../../types'
 import { CollapseComponent } from '../base/CollapseComponent'
-import { Screenshot } from '../../tools/ScreenShot'
+import { Screenshot } from '../../helpers/ScreenShot'
 import { SwitchComponent } from '../base/SwitchComponent'
+import { VideoRecorderComponent } from '../tools/VideoRecorderComponent'
+import { GLTFExporterComponent } from '../tools/GLTFExporterComponent'
 
 
 export const Tools = () => {
@@ -17,6 +19,7 @@ export const Tools = () => {
 	const measureToolRef = useRef<Nullable<Measure>>(null)
 	const prevAfterRender = useRef<onAfterRender>(() => {})
 	const gizmoRef = useRef<Nullable<NavigatorGizmo>>(null)
+
 
 
 	const onMeasureVisibleChanged = useCallback(
@@ -43,7 +46,7 @@ export const Tools = () => {
 			}
 			const enableGizmo = visible && camera && renderer
 			if (enableGizmo) {
-				const gizmo = new NavigatorGizmo(camera as PerspectiveCamera, renderer)
+				const gizmo = new NavigatorGizmo(camera as PerspectiveCamera, renderer, { standalone: true })
 				gizmoRef.current = gizmo
 				prevAfterRender.current = scene.onAfterRender
 				scene.onAfterRender = (...args) => {
@@ -81,11 +84,9 @@ export const Tools = () => {
 			<SwitchComponent name="3D NavigatorGizmo" onChange={onNavGizmoVisibleChanged} />
 			<CollapseComponent label="Capture" defaultOpened>
 				<ButtonComponent onClick={screenshot}>Screenshot</ButtonComponent>
-				<ButtonComponent>Record video</ButtonComponent>
+				<VideoRecorderComponent />
 			</CollapseComponent>
-			<CollapseComponent label="GLTF Export">
-				<ButtonComponent>Export to GLTF</ButtonComponent>
-			</CollapseComponent>
+			<GLTFExporterComponent />
 		</div>
 	)
 }

@@ -4,7 +4,6 @@ import { Nullable } from '../packages/inspector/src/types'
 import styled from '@emotion/styled'
 import { Inspector } from '../packages/inspector/src'
 import dogImgUrl from './assets/dog.jpg'
-import dragonBallImgUrl from './assets/dragon-ball.png'
 
 const Main = styled.div`
 	width: 100%;
@@ -30,7 +29,7 @@ export function App() {
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ color: 0xff00ff })
     const cube = new THREE.Mesh(geometry, material)
-		const axes = new THREE.AxesHelper(1000)
+		// const axes = new THREE.AxesHelper(1000)
 
 		const texture = textureLoader.load(dogImgUrl)
 
@@ -40,13 +39,13 @@ export function App() {
 
 		const group = new THREE.Group()
 
-		// group.add(cube)
+		group.add(cube)
 
-		// group.add(ball)
+		group.add(ball)
 
 		scene.add(basicMatCube)
 
-		scene.add(axes)
+		// scene.add(axes)
 
 		ball.position.x = 2
 
@@ -55,7 +54,7 @@ export function App() {
 		cube.position.y = 1
 
 		camera.position.x = 0
-		camera.position.y = 0
+		camera.position.y = 10
 		camera.position.z = 10
 
 		camera.lookAt(new THREE.Vector3(0, 0, 0))
@@ -75,16 +74,12 @@ export function App() {
 			camera.updateProjectionMatrix()
 		}
 
-		const img = new Image()
-
-		img.src = dragonBallImgUrl
-
 		Inspector.show(scene, camera, renderer, { measureDom: canvas.parentElement!})
 		const render = () => {
-			// cube.rotation.y += 0.01
-			// cube.rotation.x += 0.01
-			// ball.rotation.y += 0.01
-			// ball.rotation.x += 0.01
+			cube.rotation.y += 0.01
+			cube.rotation.x += 0.01
+			ball.rotation.y += 0.01
+			ball.rotation.x += 0.01
 			renderer.render(scene, camera)
 			frameId.current = requestAnimationFrame(render)
     }

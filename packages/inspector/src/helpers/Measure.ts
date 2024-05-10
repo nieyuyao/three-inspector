@@ -59,6 +59,7 @@ export class Measure {
 		dom.addEventListener('pointerdown', this.handleMouseDownEvent, true)
 		dom.addEventListener('pointermove', this.handleMouseMoveEvent, true)
 		dom.addEventListener('pointerup', this.handleMouseUpEvent, true)
+		dom.addEventListener('pointerleave', this.handleMouseUpEvent, true)
 	}
 
 	private handleMouseDownEvent = (event: MouseEvent) => {
@@ -180,6 +181,7 @@ export class Measure {
 		this.dom.removeEventListener('pointerdown', this.handleMouseDownEvent, true)
 		this.dom.removeEventListener('pointermove', this.handleMouseMoveEvent, true)
 		this.dom.removeEventListener('pointerup', this.handleMouseUpEvent, true)
+		this.dom.removeEventListener('pointerleave', this.handleMouseUpEvent, true)
 	}
 
 	setColor(color: number) {

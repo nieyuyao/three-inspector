@@ -16,15 +16,24 @@ export const CollapseContainer = styled.div`
 
 	.arco-collapse  {
 		margin: 0 !important;
+    overflow: unset;
+    &::after {
+      display: none;
+    }
 	}
 
 	.arco-collapse-item-header {
+    padding-left: 20px;
 		padding-top: 6px;
 		padding-bottom: 6px;
 		font-size: var(--base-font-size);
 		color: var(--base-font-color) !important;
 		background-color: #303030;
 		border: none;
+
+    .arco-collapse-item-icon-hover {
+      left: 4px;
+    }
 	}
 
 	.arco-collapse-item-content {
@@ -34,14 +43,17 @@ export const CollapseContainer = styled.div`
 		background-color: #303030;
 	}
 
+  .arco-icon-hover:hover::before {
+    background: transparent;
+  }
+
 	.arco-collapse-item-content-box {
-		padding: 6px !important;
+		padding: 0px !important;
 	}
 `
 
 const styles: CSSProperties = {
 	margin: '0 6px',
-	backgroundColor: 'var(--base-tab-grid-bg-color)'
 }
 
 export const CollapseComponent = (props: Props) => {

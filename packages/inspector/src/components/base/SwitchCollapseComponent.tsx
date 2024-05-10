@@ -22,6 +22,10 @@ const Container = styled.div`
 	}
 	.arco-collapse  {
 		margin: 0 !important;
+    overflow: unset;
+    &::after {
+      display: none;
+    }
 	}
 
 	.panel {
@@ -34,7 +38,7 @@ const Container = styled.div`
 		}
 
 		.arco-collapse-item-content {
-			padding: 0 6px !important;
+			padding: 0 !important;
 			font-size: var(--base-font-size);
 			color: var(--base-font-color) !important;
 			background-color: var(--base-tab-grid-bg-color);

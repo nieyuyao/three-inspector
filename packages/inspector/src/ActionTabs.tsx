@@ -48,9 +48,13 @@ const Container = styled.div`
 
 	.arco-tabs-content {
 		padding: 0 6px;
-		height: 100%;
+		height: calc(100% - 40px);
 		overflow: auto;
 	}
+
+  .arco-tabs-content-item {
+    overflow: unset;
+  }
 
 	.arco-tabs-header {
 		display: flex;
@@ -87,7 +91,7 @@ const Container = styled.div`
 			align-items: center;
 			margin: 0 !important;
 			font-size: var(--base-font-size);
-			color:
+      color: var(--base-font-color);
 			.arco-tabs-tab-icon {
 				margin-inline-end: 6px !important;
 			}
