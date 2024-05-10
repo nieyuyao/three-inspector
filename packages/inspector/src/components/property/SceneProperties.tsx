@@ -78,12 +78,12 @@ export const SceneProperties = (props: Props) => {
 				<ColorComponent name="color" onChange={onBgColorChanged} />
 				<NumericInputComponent
 					name="Near"
-					object={scene.fog || {}}
+          defaultValue={(scene.fog as Fog)?.near}
 					onChange={(val) => onFogChanged('near', val)}
 				/>
 				<NumericInputComponent
 					name="Far"
-					object={scene.fog || {}}
+          defaultValue={(scene.fog as Fog)?.far}
 					onChange={(val) => onFogChanged('far', val)}
 				/>
 			</SwitchCollapseComponent>

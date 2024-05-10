@@ -1,35 +1,35 @@
 import {
-	type Material,
-	Mesh,
-	BufferGeometry,
-	ShaderMaterial,
-	Color,
-	Float32BufferAttribute,
-	DoubleSide,
-	Camera,
-	Scene,
-	WebGLRenderer,
-	Matrix4,
+  type Material,
+  Mesh,
+  BufferGeometry,
+  ShaderMaterial,
+  Color,
+  Float32BufferAttribute,
+  DoubleSide,
+  Camera,
+  Scene,
+  WebGLRenderer,
+  Matrix4,
 } from 'three'
 
 export class InfiniteGrid extends Mesh {
-	public name = 'InspectorInfiniteGrid'
+  public name = 'InspectorInfiniteGrid'
 
-	constructor(color: number) {
-		const geometry = new BufferGeometry()
-		geometry.setAttribute(
-			'position',
-			new Float32BufferAttribute([1, 1, 0, -1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0, -1, -1, 0], 3)
-		)
+  constructor(color: number) {
+    const geometry = new BufferGeometry()
+    geometry.setAttribute(
+      'position',
+      new Float32BufferAttribute([1, 1, 0, -1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0, -1, -1, 0], 3)
+    )
 
-		const material = new ShaderMaterial({
-			transparent: true,
-			side: DoubleSide,
-			uniforms: {
-				cameraWorldMat: { value: new Matrix4() },
-				color: { value: new Color().setHex(color) },
-			},
-			vertexShader: `
+    const material = new ShaderMaterial({
+      transparent: true,
+      side: DoubleSide,
+      uniforms: {
+        cameraWorldMat: { value: new Matrix4() },
+        color: { value: new Color().setHex(color) },
+      },
+      vertexShader: `
 				uniform mat4 cameraWorldMat;
 				varying mat4 projectionMat;
 				varying vec3 nearPoint;
@@ -48,7 +48,9 @@ export class InfiniteGrid extends Mesh {
 
 				}
 			`,
-			fragmentShader: `
+      fragmentShader: `
+        #define EPSILON 0.04
+
 				varying vec3 nearPoint;
 				varying vec3 farPoint;
 				varying mat4 projectionMat;
@@ -65,9 +67,16 @@ export class InfiniteGrid extends Mesh {
 					vec2 derivative = fwidth(coord);
 					vec2 grid = abs(fract(coord - 0.5) - 0.5) / derivative;
 					float line = min(grid.x, grid.y);
-					float minimumz = min(derivative.y, 1.0);
-					float minimumx = min(derivative.x, 1.0);
-					vec4 color = vec4(0.4, 0.4, 0.4, 1.0 - min(line, 1.0));
+          vec3 rgb = vec3(0.4, 0.4, 0.4);
+          // x axis
+          if (abs(fragPos3D.x) <= EPSILON) {
+            rgb = vec3(1., 0.21, 0.32);
+          }
+          // z axis
+          else if (abs(fragPos3D.z) <= EPSILON) {
+            rgb = vec3(0.17, 0.56, 1.);
+          }
+					vec4 color = vec4(rgb, 1.0 - min(line, 1.0));
 					return color;
 				}
 
@@ -76,21 +85,20 @@ export class InfiniteGrid extends Mesh {
 					vec3 fragPos3D = nearPoint + t * (farPoint - nearPoint);
 					float depth = computeDepth(fragPos3D);
 					gl_FragDepth = depth;
-					float fading = max(0.0, (0.5 - depth));
-					gl_FragColor = grid(fragPos3D, 0.2) * step(0.0, min(1.0, t));
-					gl_FragColor.a *= 1. - pow(depth, 20.);
+          gl_FragColor = grid(fragPos3D, 0.2) * step(0.0, min(1.0, t));
+          gl_FragColor.a *= 1. - pow(depth, 20.);
 				}
 			`,
-		})
-		super(geometry, material)
-	}
+    })
+    super(geometry, material)
+  }
 
-	onBeforeRender(_: WebGLRenderer, __: Scene, camera: Camera): void {
-		;(this.material as ShaderMaterial).uniforms.cameraWorldMat.value = camera.matrixWorld
-	}
+  onBeforeRender(_: WebGLRenderer, __: Scene, camera: Camera): void {
+    ;(this.material as ShaderMaterial).uniforms.cameraWorldMat.value = camera.matrixWorld
+  }
 
-	dispose() {
-		this.geometry.dispose()
-		;(this.material as Material).dispose()
-	}
+  dispose() {
+    this.geometry.dispose()
+    ;(this.material as Material).dispose()
+  }
 }

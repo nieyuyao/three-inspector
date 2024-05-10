@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Input } from '@arco-design/web-react'
-import { isReadonly } from '../../utils/prop'
 import { Line } from './Line'
 
 interface Props {
+  label?: string
 	name: string
-	object: any
+  defaultValue?: any
 	max?: number
 	min?: number
+  disabled?: boolean
 	onChange?: (prop: string, val: number) => void
 }
 
 export const NumericInputComponent = (props: Props) => {
-	const { name, object } = props
-	const [value, setValue] = useState(object[name])
+	const { name, defaultValue, label, disabled = false } = props
+	const [value, setValue] = useState(defaultValue || '')
 	const onChange = useCallback((value: string) => {
 		let val = Number(value)
 		setValue(value)
@@ -24,14 +25,13 @@ export const NumericInputComponent = (props: Props) => {
 	}, [props.name])
 
 	useEffect(() => {
-		const { name, object } = props
-		setValue(object[name])
-	}, [props])
+		setValue(defaultValue)
+	}, [defaultValue])
 	return (
-		<Line label={name} contentStyle={{ maxWidth: 'calc(100% - 80px)' }}>
+		<Line label={label ?? name} contentStyle={{ maxWidth: 'calc(100% - 80px)' }}>
 			<Input
 				style={{ width: '100%', padding: '0 12px' }}
-				disabled={isReadonly(object, name)}
+				disabled={disabled}
 				value={value}
 				onChange={onChange}
 				max={props.max}

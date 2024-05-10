@@ -22,6 +22,7 @@ import { SwitchComponent } from '../base/SwitchComponent'
 import { CollapseComponent } from '../base/CollapseComponent'
 import { SelectComponent } from '../base/SelectComponent'
 import { INSPECTOR_CLASS_NAME } from '../../utils/constants'
+import { CheckboxComponent } from '../base/CheckboxComponent'
 
 
 const isLowerVersion = () => +REVISION < 152
@@ -92,6 +93,11 @@ export const Debug = () => {
             { value: AgXToneMapping, label: 'AgXToneMapping' },
           ]}
         />
+      </CollapseComponent>
+
+      <CollapseComponent label='Settings'>
+        <CheckboxComponent name='Sprites' />
+        <CheckboxComponent name='Lights' />
       </CollapseComponent>
     </>
   )

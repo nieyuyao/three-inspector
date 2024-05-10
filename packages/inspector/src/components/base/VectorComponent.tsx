@@ -58,7 +58,7 @@ export const VectorComponent = (props: Props) => {
 						<NumericInputComponent
 							key={`${object.uuid}-${key}`}
 							name={key}
-							object={vector}
+							defaultValue={(vector as any)[key]}
 							onChange={updateVector}
 						/>
 					)

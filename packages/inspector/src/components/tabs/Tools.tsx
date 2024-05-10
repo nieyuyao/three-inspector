@@ -10,83 +10,88 @@ import { Screenshot } from '../../helpers/ScreenShot'
 import { SwitchComponent } from '../base/SwitchComponent'
 import { VideoRecorderComponent } from '../tools/VideoRecorderComponent'
 import { GLTFExporterComponent } from '../tools/GLTFExporterComponent'
-
+import { GLTFImporterComponent } from '../tools/GLTFImporterComponent'
+import { WebPExporterComponent } from '../tools/WebPExporterComponent'
 
 export const Tools = () => {
-	const { scene, camera, canvas, measureDom, renderer } = useContext<GlobalContext>(globalContext)
-	const [_, setMeasureVisible] = useState(false)
-	const [__, setGizmoVisible] = useState(false)
-	const measureToolRef = useRef<Nullable<Measure>>(null)
-	const prevAfterRender = useRef<onAfterRender>(() => {})
-	const gizmoRef = useRef<Nullable<NavigatorGizmo>>(null)
+  const { scene, camera, canvas, measureDom, renderer } = useContext<GlobalContext>(globalContext)
+  const [_, setMeasureVisible] = useState(false)
+  const [__, setGizmoVisible] = useState(false)
+  const measureToolRef = useRef<Nullable<Measure>>(null)
+  const prevAfterRender = useRef<onAfterRender>(() => {})
+  const gizmoRef = useRef<Nullable<NavigatorGizmo>>(null)
 
+  const onMeasureVisibleChanged = useCallback(
+    (visible: boolean) => {
+      setMeasureVisible(visible)
+      if (!scene || !camera || !canvas) {
+        return
+      }
+      if (visible) {
+        measureToolRef.current = new Measure(camera, scene, measureDom || canvas)
+      } else {
+        measureToolRef.current?.dispose()
+        measureToolRef.current = null
+      }
+    },
+    [scene, canvas, camera]
+  )
 
+  const onNavGizmoVisibleChanged = useCallback(
+    (visible: boolean) => {
+      setGizmoVisible(visible)
+      if (!scene) {
+        return
+      }
+      const enableGizmo = visible && camera && renderer
+      if (enableGizmo) {
+        const gizmo = new NavigatorGizmo(camera as PerspectiveCamera, renderer, {
+          standalone: true,
+          clearColor: 0x000000,
+          clearAlpha: 0,
+        })
+        gizmoRef.current = gizmo
+        prevAfterRender.current = scene.onAfterRender
+        scene.onAfterRender = (...args) => {
+          prevAfterRender.current(...args)
+          gizmo.update()
+        }
+      } else {
+        scene.onAfterRender = prevAfterRender.current
+        gizmoRef.current?.dispose()
+        gizmoRef.current = null
+      }
+    },
+    [scene, camera]
+  )
 
-	const onMeasureVisibleChanged = useCallback(
-		(visible: boolean) => {
-			setMeasureVisible(visible)
-			if (!scene || !camera || !canvas) {
-				return
-			}
-			if (visible) {
-				measureToolRef.current = new Measure(camera, scene, measureDom || canvas)
-			} else {
-				measureToolRef.current?.dispose()
-				measureToolRef.current = null
-			}
-		},
-		[scene, canvas, camera]
-	)
+  const screenshot = useCallback(() => {
+    if (!scene) {
+      return
+    }
+    const existAfRender = scene.onAfterRender
+    scene.onAfterRender = (...args) => {
+      scene.onAfterRender = existAfRender
+      canvas?.toBlob((blob) => {
+        if (blob) {
+          Screenshot.download(blob, 'Screenshot.png')
+        }
+      })
+      existAfRender(...args)
+    }
+  }, [canvas, scene])
 
-	const onNavGizmoVisibleChanged = useCallback(
-		(visible: boolean) => {
-			setGizmoVisible(visible)
-			if (!scene) {
-				return
-			}
-			const enableGizmo = visible && camera && renderer
-			if (enableGizmo) {
-				const gizmo = new NavigatorGizmo(camera as PerspectiveCamera, renderer, { standalone: true })
-				gizmoRef.current = gizmo
-				prevAfterRender.current = scene.onAfterRender
-				scene.onAfterRender = (...args) => {
-					prevAfterRender.current(...args)
-					gizmo.update()
-				}
-			} else {
-				scene.onAfterRender = prevAfterRender.current
-				gizmoRef.current?.dispose()
-				gizmoRef.current = null
-			}
-		},
-		[scene, camera]
-	)
-
-	const screenshot = useCallback(() => {
-		if (!scene) {
-			return
-		}
-		const existAfRender = scene.onAfterRender
-		scene.onAfterRender = (...args) => {
-			scene.onAfterRender = existAfRender
-			canvas?.toBlob((blob) => {
-				if (blob) {
-					Screenshot.download(blob, 'Screenshot.png')
-				}
-			})
-			existAfRender(...args)
-		}
-	}, [canvas, scene])
-
-	return (
-		<div>
-			<SwitchComponent name="Measure" onChange={onMeasureVisibleChanged} />
-			<SwitchComponent name="3D NavigatorGizmo" onChange={onNavGizmoVisibleChanged} />
-			<CollapseComponent label="Capture" defaultOpened>
-				<ButtonComponent onClick={screenshot}>Screenshot</ButtonComponent>
-				<VideoRecorderComponent />
-			</CollapseComponent>
-			<GLTFExporterComponent />
-		</div>
-	)
+  return (
+    <div>
+      <SwitchComponent name="Measure" onChange={onMeasureVisibleChanged} />
+      <SwitchComponent name="3D NavigatorGizmo" onChange={onNavGizmoVisibleChanged} />
+      <CollapseComponent label="Capture" defaultOpened>
+        <ButtonComponent onClick={screenshot}>Screenshot</ButtonComponent>
+        <VideoRecorderComponent />
+      </CollapseComponent>
+      <GLTFExporterComponent />
+      <GLTFImporterComponent />
+      <WebPExporterComponent />
+    </div>
+  )
 }

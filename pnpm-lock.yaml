@@ -48,8 +48,9 @@ importers:
       react-colorful: ^5.6.1
       react-dom: ^18.2.0
       rollup: ^4.13.0
-      threejs-navigator-gizmo: 0.0.4
+      threejs-navigator-gizmo: ^0.0.6
       typescript: ^5.4.3
+      wasm-webp: ^0.0.2
     dependencies:
       '@arco-design/web-react': 2.61.3_biqbaboplfbrettd7655fr4n2y
       '@emotion/cache': 11.11.0
@@ -57,7 +58,8 @@ importers:
       react: 18.2.0
       react-colorful: 5.6.1_biqbaboplfbrettd7655fr4n2y
       react-dom: 18.2.0_react@18.2.0
-      threejs-navigator-gizmo: 0.0.4
+      threejs-navigator-gizmo: 0.0.6
+      wasm-webp: 0.0.2
     devDependencies:
       '@rollup/plugin-typescript': 11.1.6_2e6zbsqjrjvt7owpn6wnh4ucya
       patch-package: 8.0.0
@@ -2118,8 +2120,8 @@ packages:
     resolution: {integrity: sha512-LC28VFtjbOyEu5b93K0bNRLw1rQlMJ85lilKsYj6dgTu+7i17W+JCCEbvrpmNHF1F3NAUqDSWq50UD7w9H2xQw==}
     dev: true
 
-  /threejs-navigator-gizmo/0.0.4:
-    resolution: {integrity: sha512-MFoCDTKt2KzWlUWjwSMm4zZdBiLT6E0MFGFN6La9Z/wQ5cpVonFqzxDB2KKDOWRFHZ0vEDi9EWQAFyjWrG4SoA==}
+  /threejs-navigator-gizmo/0.0.6:
+    resolution: {integrity: sha512-VRRlnRFlcO94esK3ePZtqyuywBJlME5ZkLPpA20QsWD2ti7ezp9XI+UhAUEAr0aKtEo3YDRMDtNuLqZHCepunQ==}
     peerDependencies:
       three: '>=0.150.0'
     dev: false
@@ -2246,6 +2248,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /wasm-webp/0.0.2:
+    resolution: {integrity: sha512-aQ1cN31SBLSLxLYLL1TvAocQ6XeohgWZyQG4Nk7lRTzoj319KEoLDkaiRWbdtJw/yEhCDsDfXYJVDFpabiFHoQ==}
+    dev: false
 
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}

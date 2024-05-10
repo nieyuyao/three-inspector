@@ -6,104 +6,114 @@ import { Inspector } from '../packages/inspector/src'
 import dogImgUrl from './assets/dog.jpg'
 
 const Main = styled.div`
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 `
 
 const textureLoader = new THREE.TextureLoader()
 
 export function App() {
-	const canvasRef = useRef<Nullable<HTMLCanvasElement>>(null)
-	const frameId = useRef<number>(0)
+  const canvasRef = useRef<Nullable<HTMLCanvasElement>>(null)
+  const frameId = useRef<number>(0)
 
-	useEffect(() => {
-		window.THREE = THREE
-		if (!canvasRef.current) {
-			return
-		}
-		const canvas = canvasRef.current
-		const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 1, 1000)
+  useEffect(() => {
+    window.THREE = THREE
+    if (!canvasRef.current) {
+      return
+    }
+    const canvas = canvasRef.current
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      canvas.clientWidth / canvas.clientHeight,
+      1,
+      1000
+    )
     const renderer = new THREE.WebGLRenderer({ antialias: true, canvas, alpha: true })
-		renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(window.devicePixelRatio)
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ color: 0xff00ff })
     const cube = new THREE.Mesh(geometry, material)
-		// const axes = new THREE.AxesHelper(1000)
 
-		const texture = textureLoader.load(dogImgUrl)
+    // const axes = new THREE.AxesHelper(1000)
 
-		const basicMatCube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ map: texture }))
+    const texture = textureLoader.load(dogImgUrl)
 
-		const ball = new THREE.Mesh(new THREE.SphereGeometry(1, 40, 40), material)
+    const basicMatCube = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ map: texture })
+    )
 
-		const group = new THREE.Group()
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(1, 40, 40), material)
 
-		group.add(cube)
+    const group = new THREE.Group()
 
-		group.add(ball)
+    group.add(cube)
 
-		scene.add(basicMatCube)
+    group.add(ball)
 
-		// scene.add(axes)
+    scene.add(basicMatCube)
 
-		ball.position.x = 2
+    // scene.add(axes)
 
-		scene.add(group)
+    ball.position.x = 2
 
-		cube.position.y = 1
+    scene.add(group)
 
-		camera.position.x = 0
-		camera.position.y = 10
-		camera.position.z = 10
+    cube.position.y = 1
 
-		camera.lookAt(new THREE.Vector3(0, 0, 0))
+    camera.position.x = 0
+    camera.position.y = 10
+    camera.position.z = 10
 
-		const light = new THREE.AmbientLight()
+    camera.lookAt(new THREE.Vector3(0, 0, 0))
 
-		scene.add(light)
+    const light = new THREE.AmbientLight()
 
-		scene.background = new THREE.Color(0, 0, 0)
+    scene.add(light)
+
+    scene.background = new THREE.Color(0, 0, 0)
     renderer.setClearColor('#000000')
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight)
 
-		window.onresize = () => {
-			renderer.setSize(window.innerWidth, window.innerHeight)
-			camera.aspect = window.innerWidth / window.innerHeight
-			camera.updateProjectionMatrix()
-		}
-
-		Inspector.show(scene, camera, renderer, { measureDom: canvas.parentElement!})
-		const render = () => {
-			cube.rotation.y += 0.01
-			cube.rotation.x += 0.01
-			ball.rotation.y += 0.01
-			ball.rotation.x += 0.01
-			renderer.render(scene, camera)
-			frameId.current = requestAnimationFrame(render)
+    window.onresize = () => {
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
     }
 
-		const stop = () => {
-			cancelAnimationFrame(frameId.current)
-			frameId.current = 0
+    Inspector.show(scene, camera, renderer, { measureDom: canvas.parentElement! })
+    const render = () => {
+      cube.rotation.y += 0.01
+      cube.rotation.x += 0.01
+      ball.rotation.y += 0.01
+      ball.rotation.x += 0.01
+      renderer.render(scene, camera)
+      frameId.current = requestAnimationFrame(render)
+    }
 
-			window.onresize = null
-		}
+    const stop = () => {
+      cancelAnimationFrame(frameId.current)
+      frameId.current = 0
 
-		render()
+      window.onresize = null
+    }
 
-		return () => {
-			stop()
-			scene.clear()
-			geometry.dispose()
-			material.dispose()
-			Inspector.destroy()
-		}
+    render()
 
-	}, [])
+    return () => {
+      stop()
+      scene.clear()
+      geometry.dispose()
+      material.dispose()
+      Inspector.destroy()
+    }
+  }, [])
 
-  return <Main>
-		<canvas style={{width: '100%', height: '100%', display: 'block'}} ref={canvasRef} />
-	</Main>
+  return (
+    <Main>
+      <canvas style={{ width: '100%', height: '100%', display: 'block' }} ref={canvasRef} />
+    </Main>
+  )
 }

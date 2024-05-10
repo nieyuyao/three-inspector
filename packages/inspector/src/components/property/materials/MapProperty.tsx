@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import type { Material, Texture } from 'three'
 import { TextureProperty } from '../textures/TextureProperty'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
@@ -17,7 +17,7 @@ type TextureProp<T> = {
 }) => {
 	const { material, prop } = props
 	const forceUpdate = useForceUpdate()
-	const uvHelper = useRef<Nullable<UVHelper>>(null)
+	const uvHelper = useRef<Nullable<UVHelper>>(new UVHelper(material))
 
 	const toggleUvHelperVisible = useCallback(
 		(visible: boolean) => {
@@ -34,6 +34,13 @@ type TextureProp<T> = {
 		},
 		[material]
 	)
+
+  useEffect(() => {
+    return () => {
+      // reset to original material if component uninstalled
+      uvHelper.current?.reset()
+    }
+  })
 	return (
 		<>
 			<SwitchComponent name="UV Debug" checked={false} onChange={toggleUvHelperVisible} />

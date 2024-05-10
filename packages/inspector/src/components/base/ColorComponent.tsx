@@ -111,7 +111,6 @@ export const ColorComponent = (props: Props) => {
     const rect = previewDivRef.current.getBoundingClientRect()
     const winWidth = window.innerWidth
     const winHeight = window.innerHeight
-    console.log(winHeight, rect.top)
     return {
       right: `${winWidth - rect.left + 4}px`,
       top: `${rect.top + 324 > winHeight ? winHeight - 324 - 4 : rect.top}px`
@@ -199,8 +198,8 @@ export const ColorComponent = (props: Props) => {
                       min={0}
                       max={comp === 'a' ? 1 : 255}
                       key={comp}
-                      name={comp.toLocaleUpperCase()}
-                      object={color}
+                      name={comp}
+                      defaultValue={(color as any)[comp]}
                       onChange={onInputChange}
                     />
                   )
