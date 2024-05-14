@@ -7,6 +7,9 @@ export default defineConfig({
 		react(),
 		svgr()
 	],
+  optimizeDeps: {
+    exclude: ['wasm-webp']
+  },
 	build: {
 		assetsInlineLimit(filePath: string) {
 		 	if (filePath.includes('.png')) {

@@ -28,7 +28,7 @@ export const StandardMaterialProperty = (props: Props) => {
 			<NumericSlider
 				min={0}
 				max={1}
-				name="Roughness"
+				label="Roughness"
 				value={material.roughness}
 				step={0.01}
 				onChange={(val) => updateMaterial(val, 'roughness')}
@@ -36,16 +36,16 @@ export const StandardMaterialProperty = (props: Props) => {
 			<NumericSlider
 				min={0}
 				max={1}
-				name="Metalness"
+				label="Metalness"
 				value={material.metalness}
 				step={0.01}
 				onChange={(val) => updateMaterial(val, 'metalness')}
 			/>
 			<NumericInputComponent
 				min={0}
-				name="BumpScale"
-				object={material}
+				prop="BumpScale"
 				key="bumpScale"
+        onChange={(val) => updateMaterial(val, 'bumpScale')}
 			/>
 			<ColorComponent
 				name="Emissive"

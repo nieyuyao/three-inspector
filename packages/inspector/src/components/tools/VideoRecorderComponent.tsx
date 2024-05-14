@@ -43,7 +43,7 @@ export const VideoRecorderComponent = () => {
 	}, [isRecording, canvas])
 	return (
 		<ButtonComponent onClick={recordVideo}>
-			{isRecording ? `Recording(${recordSeconds}s)` : 'Record video'}
+			{isRecording ? `Recording(${recordSeconds}s)...` : 'Record video'}
 		</ButtonComponent>
 	)
 }

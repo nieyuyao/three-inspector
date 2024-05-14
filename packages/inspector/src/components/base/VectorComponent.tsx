@@ -42,7 +42,7 @@ export const VectorComponent = (props: Props) => {
 	const keys = getKeys(vector)
 
 	const updateVector = useCallback(
-		(name: string, val: string | number) => {
+		(val: string | number, name: string) => {
 			// @ts-ignore
 			vector[name] = val
 		},
@@ -57,7 +57,7 @@ export const VectorComponent = (props: Props) => {
 					return (
 						<NumericInputComponent
 							key={`${object.uuid}-${key}`}
-							name={key}
+							prop={key}
 							defaultValue={(vector as any)[key]}
 							onChange={updateVector}
 						/>

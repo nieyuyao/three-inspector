@@ -118,7 +118,7 @@ export const ColorComponent = (props: Props) => {
   }, [pickerVisible])
 
   const onInputChange = useCallback(
-    (comp: string, val: number) => {
+    (val: number, comp: string) => {
       const newColor = { ...colorRef.current, [comp]: Math.min(comp === 'a' ? 1 : 255, val) }
       colorRef.current = newColor
       setColor(newColor)
@@ -198,7 +198,7 @@ export const ColorComponent = (props: Props) => {
                       min={0}
                       max={comp === 'a' ? 1 : 255}
                       key={comp}
-                      name={comp}
+                      prop={comp}
                       defaultValue={(color as any)[comp]}
                       onChange={onInputChange}
                     />

@@ -4,7 +4,7 @@ import { Slider } from '@arco-design/web-react'
 import { Nullable } from '../../types'
 
 interface Props {
-	name: string
+  label?: string
 	value: number
 	min?: number
 	max?: number
@@ -27,7 +27,7 @@ export const NumericSlider = (props: Props) => {
 		}
 	}
 	return (
-		<Line label={props.name} ref={lineRef}>
+		<Line label={props.label} ref={lineRef}>
 			<Slider
 				style={{ width: '200px', marginRight: '8px' }}
 				min={min}

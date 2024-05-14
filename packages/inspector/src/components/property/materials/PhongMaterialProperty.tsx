@@ -2,8 +2,6 @@ import React, { useCallback } from 'react'
 import type { MeshPhongMaterial } from 'three'
 import { CommonMaterialProperty } from './CommonMaterialProperty'
 import { MapProperty } from './MapProperty'
-import { NumericSlider } from '../../base/NumericSlider'
-import {} from '../../base/NumericInputComponent'
 import { NumericInputComponent } from '../../base/NumericInputComponent'
 
 interface Props {
@@ -23,12 +21,16 @@ export const PhongMaterialProperty = (props: Props) => {
   return (
     <>
       <CommonMaterialProperty material={material} />
-      <NumericInputComponent defaultValue={material.shininess} name="shininess" />
+      <NumericInputComponent
+        defaultValue={material.shininess}
+        label="shininess"
+        onChange={(val) => updateMaterial(val, 'shininess')}
+      />
       <MapProperty material={material} prop="bumpMap" />
       <NumericInputComponent
         min={0}
         max={1000}
-        name="bumpScale"
+        prop="bumpScale"
         defaultValue={material.bumpScale}
         onChange={(val) => updateMaterial(val, 'bumpScale')}
       />
@@ -36,14 +38,14 @@ export const PhongMaterialProperty = (props: Props) => {
       <NumericInputComponent
         min={0}
         max={1000}
-        name="displacementScale"
+        prop="displacementScale"
         defaultValue={material.displacementScale}
         onChange={(val) => updateMaterial(val, 'displacementScale')}
       />
       <NumericInputComponent
         min={0}
         max={1000}
-        name="displacementBias"
+        prop="displacementBias"
         defaultValue={material.displacementBias}
         onChange={(val) => updateMaterial(val, 'displacementBias')}
       />
