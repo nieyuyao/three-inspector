@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { TransformPropertyComponent } from './TransformProperty'
 import { GeneralPropertyComponent } from './GeneralPropertyComponent'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { UserDataProperty } from './UserDataProperty'
 
 export const ObjectProperties = () => {

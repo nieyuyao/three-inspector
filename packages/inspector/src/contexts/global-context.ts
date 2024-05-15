@@ -1,8 +1,8 @@
 import { createContext } from 'react'
 import type { Scene, Object3D, Camera, WebGLRenderer } from 'three'
-import { Nullable } from './types'
+import { Nullable } from '../types'
 
-export interface GlobalContext {
+export interface GlobalContext  {
 	scene: Nullable<Scene>
 	camera: Nullable<Camera>
 	canvas: Nullable<HTMLCanvasElement>

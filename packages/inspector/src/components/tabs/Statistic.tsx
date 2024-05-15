@@ -11,7 +11,7 @@ import {
 import { REVISION } from 'three'
 import { TextLineComponent } from '../base/TextLineComponent'
 import { CollapseComponent } from '../base/CollapseComponent'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { isLight, isMesh } from '../../utils/object'
 
 export const Statistic = () => {

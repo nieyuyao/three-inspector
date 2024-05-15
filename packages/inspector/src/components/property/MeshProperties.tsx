@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { Mesh, MeshBasicMaterial } from 'three'
 import { ObjectProperties } from './ObjectProperties'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { BasicMaterialProperty } from './materials/BasicMaterialProperty'
 import { NormalsHelper } from '../../helpers/NormalsHelper'
 import { SwitchComponent } from '../base/SwitchComponent'

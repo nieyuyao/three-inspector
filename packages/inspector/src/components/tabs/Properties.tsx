@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import type { Object3D, Scene, Group, Light } from 'three'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { SceneProperties } from '../property/SceneProperties'
 import { MeshProperties } from '../property/MeshProperties'
 import { ObjectProperties } from '../property/ObjectProperties'

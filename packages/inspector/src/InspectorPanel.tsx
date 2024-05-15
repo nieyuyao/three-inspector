@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { GlobalContext, GlobalUtilsContext, globalUtilsContext, globalContext } from './global-context'
+import { GlobalContext, GlobalUtilsContext, globalUtilsContext, globalContext } from './contexts/global-context'
 import type { Scene, Camera, WebGLRenderer } from 'three'
 import { Nullable } from './types'
 import styled from '@emotion/styled'

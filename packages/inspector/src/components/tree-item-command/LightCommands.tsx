@@ -4,7 +4,7 @@ import { Visibility } from './Visibility'
 import IconLocation from '../../assets/icons/location.svg?react'
 import lightIcon from '../../assets/imgs/light.png'
 import { CommandsContainer } from './CommandsContainer'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 
 interface Props {
 	light: Light
@@ -41,7 +41,9 @@ export const LightCommands = (props: Props) => {
 				color={lightPosVisible ? 'var(--base-command-icon-selected-color)' : 'var(--base-command-icon-color)'}
 				onClick={toggleLightPosition}
 			/>
-			<Visibility visible={false} style={{ margin: '0 6px' }} />
+			<Visibility visible={light.visible} style={{ margin: '0 6px' }} onChange={(visible) => {
+        light.visible = visible
+      }} />
 		</CommandsContainer>
 	)
 }

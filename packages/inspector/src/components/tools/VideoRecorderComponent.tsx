@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react'
 import { ButtonComponent } from '../base/ButtonComponent'
 import { VideoRecorder } from '../../helpers/VideoRecorder'
 import { download }  from '../../utils/tool'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 
 export const VideoRecorderComponent = () => {
 	const { canvas } = useContext<GlobalContext>(globalContext)

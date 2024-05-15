@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import { ButtonComponent } from '../base/ButtonComponent'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { globalContext } from '../../global-context'
+import { globalContext } from '../../contexts/global-context'
 
 export const GLTFImporterComponent = () => {
 

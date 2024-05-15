@@ -7,7 +7,7 @@ import {
 	GlobalUtilsContext,
 	globalUtilsContext,
 	globalContext,
-} from './global-context'
+} from './contexts/global-context'
 import { ObjectCommands } from './components/tree-item-command/ObjectCommands'
 import { SceneCommands } from './components/tree-item-command/SceneCommands'
 import styled from '@emotion/styled'

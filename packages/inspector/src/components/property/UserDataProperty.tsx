@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { CollapseComponent } from '../base/CollapseComponent'
 import { TextAreaComponent } from '../base/TextAreaComponent'
 import { SwitchComponent } from '../base/SwitchComponent'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 
 interface Props {
 	prettyJsonDisabled?: boolean

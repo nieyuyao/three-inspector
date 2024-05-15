@@ -3,7 +3,7 @@ import { encodeAnimation, Nullable, WebPAnimationFrame } from 'wasm-webp'
 import { CollapseComponent } from '../base/CollapseComponent'
 import { ButtonComponent } from '../base/ButtonComponent'
 import { NumericInputComponent } from '../base/NumericInputComponent'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { Vector2, WebGLRenderTarget } from 'three'
 import { download } from '../../utils/tool'
 

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react'
 import { PerspectiveCamera } from 'three'
 import { NavigatorGizmo } from 'threejs-navigator-gizmo'
 import { ButtonComponent } from '../base/ButtonComponent'
-import { GlobalContext, globalContext } from '../../global-context'
+import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { Measure } from '../../helpers/Measure'
 import { Nullable } from '../../types'
 import { CollapseComponent } from '../base/CollapseComponent'
@@ -12,6 +12,13 @@ import { VideoRecorderComponent } from '../tools/VideoRecorderComponent'
 import { GLTFExporterComponent } from '../tools/GLTFExporterComponent'
 import { GLTFImporterComponent } from '../tools/GLTFImporterComponent'
 import { WebPExporterComponent } from '../tools/WebPExporterComponent'
+import {
+  defaultToolsContext,
+  toolsContext,
+  ToolsContext,
+  ToolsContextUtils,
+  defaultToolsContextUtils,
+} from '../../contexts/tools-context'
 
 export const Tools = () => {
   const { scene, camera, canvas, measureDom, renderer } = useContext<GlobalContext>(globalContext)
@@ -20,6 +27,20 @@ export const Tools = () => {
   const measureToolRef = useRef<Nullable<Measure>>(null)
   const prevAfterRender = useRef<onAfterRender>(() => {})
   const gizmoRef = useRef<Nullable<NavigatorGizmo>>(null)
+  const [toolsState, setToolsState] = useState<ToolsContext>(defaultToolsContext)
+  const toolsUtils = useRef<ToolsContextUtils>({
+    ...defaultToolsContextUtils,
+    updateGizmo(key: keyof ToolsContext['navigatorGizmo'], val: any) {
+      const gizmo = toolsState.navigatorGizmo
+      gizmo[key] = val
+      setToolsState((prevState) => {
+        return {
+          ...prevState,
+          gizmo,
+        }
+      })
+    }
+  })
 
   const onMeasureVisibleChanged = useCallback(
     (visible: boolean) => {
@@ -40,6 +61,7 @@ export const Tools = () => {
   const onNavGizmoVisibleChanged = useCallback(
     (visible: boolean) => {
       setGizmoVisible(visible)
+      toolsUtils.current.updateGizmo('visible', visible)
       if (!scene) {
         return
       }
@@ -82,9 +104,17 @@ export const Tools = () => {
   }, [canvas, scene])
 
   return (
-    <div>
-      <SwitchComponent name="Measure" onChange={onMeasureVisibleChanged} />
-      <SwitchComponent name="3D NavigatorGizmo" onChange={onNavGizmoVisibleChanged} />
+    <toolsContext.Provider value={toolsState}>
+      <SwitchComponent
+        name="Measure"
+        onChange={onMeasureVisibleChanged}
+        checked={toolsState.measure.visible}
+      />
+      <SwitchComponent
+        name="3D NavigatorGizmo"
+        onChange={onNavGizmoVisibleChanged}
+        checked={toolsState.navigatorGizmo.visible}
+      />
       <CollapseComponent label="Capture" defaultOpened>
         <ButtonComponent onClick={screenshot}>Screenshot</ButtonComponent>
         <VideoRecorderComponent />
@@ -92,6 +122,6 @@ export const Tools = () => {
       <GLTFExporterComponent />
       <GLTFImporterComponent />
       <WebPExporterComponent />
-    </div>
+    </toolsContext.Provider>
   )
 }

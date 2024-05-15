@@ -4,7 +4,7 @@ import { CollapseComponent } from '../base/CollapseComponent'
 import { ButtonComponent } from '../base/ButtonComponent'
 import { SwitchComponent } from '../base/SwitchComponent'
 import { GLTFExporter, GLTFExporterOptions } from 'three/examples/jsm/exporters/GLTFExporter'
-import { globalContext } from '../../global-context'
+import { globalContext } from '../../contexts/global-context'
 import { download } from '../../utils/tool'
 
 export const GLTFExporterComponent = () => {
