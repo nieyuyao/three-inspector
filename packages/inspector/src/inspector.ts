@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot, type Root } from 'react-dom/client'
-import type { Scene, Camera, WebGLRenderer } from 'three'
+import type { Scene, Camera, WebGLRenderer, BufferGeometry, Material, Group } from 'three'
 import { type InspectorPanelProps, InspectorPanel } from './InspectorPanel'
 import { Nullable } from './types'
 import { INSPECTOR_CLASS_NAME } from './utils/constants'
@@ -8,6 +8,7 @@ import { INSPECTOR_CLASS_NAME } from './utils/constants'
 interface Options {
 	element?: HTMLElement
 	measureDom?: HTMLElement
+  highlightSelected?: boolean
 }
 
 
@@ -30,6 +31,7 @@ export class Inspector {
 
 	static show(scene: Scene, camera: Camera, renderer: WebGLRenderer, options?: Options) {
 		this.scene = scene
+    this.#overrideScene(scene)
 		this.camera = camera
 		this.renderer = renderer
 		this.options = options ?? {}
@@ -61,6 +63,7 @@ export class Inspector {
 			container: this.panelHostElement!,
 			popupMode: this.popupMode,
 			measureDom: options?.measureDom ?? null,
+      highlightSelected: options?.highlightSelected,
 			onClose: () => {
 				this.destroy()
 				if (this.popupMode) {
@@ -129,6 +132,10 @@ export class Inspector {
 				child.dispose()
 			}
 		})
+    // @ts-ignore
+    scene.extraObjects.forEach(obj => obj?.dispose())
+    // @ts-ignore
+    scene.extraObjects = []
 	}
 
 	static #copyStyles(sourceDoc: Document, targetDoc: Document) {
@@ -154,6 +161,40 @@ export class Inspector {
 		}
 	}
 
+  static #overrideScene(scene: Scene) {
+    const userOnAfterRender = scene.onAfterRender
+    // @ts-ignore
+    scene.afterRenderHooks = [] as Array<AfterRenderHook>
+    // @ts-ignore
+    scene.registerAfterRenderHook = function(hook: AfterRenderHook) {
+      const idx = this.afterRenderHooks.findIndex((ah: AfterRenderHook) => ah === hook)
+      if (idx < 0) {
+        this.afterRenderHooks.push(hook)
+      }
+    }
+    // @ts-ignore
+    scene.unregisterAfterRenderHook = function(hook: AfterRenderHook) {
+      const idx = this.afterRenderHooks.findIndex((ah: AfterRenderHook) => ah === hook)
+      if (idx > -1) {
+        this.afterRenderHooks.splice(idx, 1)
+      }
+    }
+    scene.onAfterRender = function(
+      renderer: WebGLRenderer,
+      scene: Scene,
+      camera: Camera,
+      geometry: BufferGeometry,
+      material: Material,
+      group: Group
+    ) {
+      userOnAfterRender(renderer, scene, camera, geometry, material, group)
+      this.afterRenderHooks.forEach((hook: AfterRenderHook) => hook(renderer, scene, camera, geometry, material, group))
+    }
+    // @ts-ignore
+    scene.extraObjects = []
+  }
+
+
 	static #createPopUp() {
 		const features = 'left=100,top=100,width=360,height=640'
 		const popupWindow = window.open('', 'INSPECTOR', features) as Window & typeof globalThis
@@ -165,3 +206,6 @@ export class Inspector {
 		this.#copyStyles(window.document, popupDocument)
 	}
 }
+
+// @ts-ignore
+window.Inspector = Inspector

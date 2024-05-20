@@ -12,10 +12,11 @@ import {
   defaultDebugContextUtils
 } from '../../contexts/debug-context'
 import { RendererComponent } from '../debug/RendererComponent'
+import { deepClone } from '../../utils/common'
 
 export const Debug = () => {
   const { scene } = useContext<GlobalContext>(globalContext)
-  const [debugState, setDebugState] = useState<DebugContext>(defaultDebugContext)
+  const [debugState, setDebugState] = useState<DebugContext>(deepClone(defaultDebugContext))
 
   const debugUtils = useRef<DebugContextUtils>({
     ...defaultDebugContextUtils,

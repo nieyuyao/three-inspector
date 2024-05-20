@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { encodeAnimation, Nullable, WebPAnimationFrame } from 'wasm-webp'
 import { CollapseComponent } from '../base/CollapseComponent'
 import { ButtonComponent } from '../base/ButtonComponent'
@@ -42,8 +42,6 @@ export const WebPExporterComponent = () => {
     }
     const size = renderer.getSize(new Vector2())
     rtRef.current.setSize(size.width, size.height)
-    rtRef.current.texture.flipY = false
-    rtRef.current.texture.needsUpdate = true
 
     renderer.setRenderTarget(rtRef.current)
     renderer.render(scene, camera)
@@ -80,6 +78,12 @@ export const WebPExporterComponent = () => {
       record()
     }
   }, [isRecording])
+
+  useEffect(() => {
+    return () => {
+      rtRef.current.dispose()
+    }
+  }, [])
 
   return (
     <CollapseComponent label="Animated WebP">

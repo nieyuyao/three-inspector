@@ -10,6 +10,9 @@ export const Container = styled.div`
 	height: 24px;
 	color: #fff;
 	font-size: var(--base-font-size);
+  .label {
+    font-weight: bold;
+  }
 	.right {
 		flex: 1;
 		display: flex;

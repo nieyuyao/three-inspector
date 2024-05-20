@@ -1,6 +1,11 @@
-import React, { useRef, useState } from 'react'
-import { GlobalContext, GlobalUtilsContext, globalUtilsContext, globalContext } from './contexts/global-context'
-import type { Scene, Camera, WebGLRenderer } from 'three'
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  GlobalContext,
+  GlobalUtilsContext,
+  globalUtilsContext,
+  globalContext,
+} from './contexts/global-context'
+import { type Scene, type Camera, type WebGLRenderer, type PerspectiveCamera, Mesh } from 'three'
 import { Nullable } from './types'
 import styled from '@emotion/styled'
 import { CacheProvider } from '@emotion/react'
@@ -10,17 +15,19 @@ import IconPopup from './assets/icons/popup.svg?react'
 import { SceneExplore } from './SceneExplore'
 import { ActionTabs } from './ActionTabs'
 import { INSPECTOR_PANEL_CLASS_NAME } from './utils/constants'
+import { Outline } from './helpers/Outline'
 
 export interface InspectorPanelProps {
-	scene: Scene
-	camera: Camera
-	renderer: WebGLRenderer
-	targetObject: Nullable<THREE.Object3D>
-	onClose: () => void
-	onPopup: () => void
-	container: Node
-	popupMode?: boolean
-	measureDom?: Nullable<HTMLElement>
+  scene: Scene
+  camera: Camera
+  renderer: WebGLRenderer
+  targetObject: Nullable<THREE.Object3D>
+  onClose: () => void
+  onPopup: () => void
+  container: Node
+  popupMode?: boolean
+  measureDom?: Nullable<HTMLElement>
+  highlightSelected?: boolean
 }
 
 const flexCenter = `
@@ -30,152 +37,177 @@ const flexCenter = `
 `
 
 const PanelContainer = styled.div`
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	overflow: hidden;
-	z-index: 9999;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 9999;
 
-	.resize {
-		min-width: 360px;
-		width: 360px;
-		height: 16px;
-		opacity: 0;
-		resize: horizontal;
-		overflow: scroll;
-		transform: scale(-1, 100);
-	}
+  .resize {
+    min-width: 360px;
+    width: 360px;
+    height: 16px;
+    opacity: 0;
+    resize: horizontal;
+    overflow: scroll;
+    transform: scale(-1, 100);
+  }
 
-	.resize-horizontal-line {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 4px;
-		opacity: 0;
-		pointer-events: none;
-	}
+  .resize-horizontal-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    opacity: 0;
+    pointer-events: none;
+  }
 
-	&.popup {
-		width: 100%;
-		height: 100%;
+  &.popup {
+    width: 100%;
+    height: 100%;
 
-		.resize,
-		.resize-horizontal-line {
-			display: none;
-			width: 100%;
-			height: 100%;
-		}
+    .resize,
+    .resize-horizontal-line {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
 
-		.panel {
-			width: 100%;
-			margin-left: 0;
-		}
-	}
+    .panel {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
 `
 
 const Panel = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: calc(100% - 4px);
-	height: 100%;
-	margin-left: 4px;
-	background-color: var(--base-background-color);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 4px);
+  height: 100%;
+  margin-left: 4px;
+  background-color: var(--base-background-color);
 
-	.header {
-		position: relative;
-		color: #fff;
-		height: 30px;
-		.title {
-			${flexCenter}
-			height: 100%;
-			font-size: 16px;
-		}
+  .header {
+    position: relative;
+    color: #fff;
+    height: 30px;
+    .title {
+      ${flexCenter}
+      height: 100%;
+      font-size: 16px;
+    }
 
-		.actions {
-			display: flex;
-			position: absolute;
-			top: 0;
-			right: 12px;
-			height: 100%;
-		}
+    .actions {
+      display: flex;
+      position: absolute;
+      top: 0;
+      right: 12px;
+      height: 100%;
+    }
 
-		.action {
-			${flexCenter}
-			margin-left: 4px;
-			width: 16px;
-			height: 100%;
-			cursor: pointer;
+    .action {
+      ${flexCenter}
+      margin-left: 4px;
+      width: 16px;
+      height: 100%;
+      cursor: pointer;
 
-			& > svg {
-				width: 14px;
-				height: 14px;
-			}
-		}
-	}
+      & > svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
 
-	.content {
-		display: flex;
-		flex-direction: column;
-		height: calc(100% - 30px);
-	}
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 30px);
+  }
 `
 
 export const InspectorPanel = (props: InspectorPanelProps) => {
-	const [globalState, setGlobalState] = useState<GlobalContext>({
-		targetObject: props.targetObject,
-		scene: props.scene,
-		camera: props.camera,
-		renderer: props.renderer,
-		canvas: props.renderer.domElement,
-		measureDom: props.measureDom ?? null
-	})
+  const [globalState, setGlobalState] = useState<GlobalContext>({
+    targetObject: props.targetObject,
+    scene: props.scene,
+    camera: props.camera,
+    renderer: props.renderer,
+    canvas: props.renderer.domElement,
+    measureDom: props.measureDom ?? null,
+  })
 
-	const globalUtils = useRef<GlobalUtilsContext>({
-		updateTargetObject: (obj: THREE.Object3D) => {
-			setGlobalState((pevState) => {
-				return {
-					...pevState,
-					targetObject: obj,
-				}
-			})
-		},
-	})
+  const globalUtils = useRef<GlobalUtilsContext>({
+    updateTargetObject: (obj: THREE.Object3D) => {
+      setGlobalState((pevState) => {
+        return {
+          ...pevState,
+          targetObject: obj,
+        }
+      })
+    },
+  })
 
-	const closePanel = () => props.onClose()
+  const closePanel = () => props.onClose()
 
-	const openPopup = () => props.onPopup()
+  const openPopup = () => props.onPopup()
 
-	const cache = createCache({
-		key: 'three-inspector',
-		container: props.container,
-	})
+  const cache = createCache({
+    key: 'three-inspector',
+    container: props.container,
+  })
 
-	return (
-		<globalUtilsContext.Provider value={globalUtils.current}>
-			<globalContext.Provider value={globalState}>
-				<CacheProvider value={cache}>
-					<PanelContainer className={props.popupMode ? `${INSPECTOR_PANEL_CLASS_NAME} popup` : `${INSPECTOR_PANEL_CLASS_NAME}`}>
-						<div className="resize" />
-						<div className="resize-horizontal-line" />
-						<Panel className="panel">
-							<div className="header">
-								<div className="title">INSPECTOR</div>
-								<div className="actions">
-									<IconPopup className="action popup" color='#fff' onClick={openPopup} />
-									<IconClose className="action close" onClick={closePanel} />
-								</div>
-							</div>
-							<div className="content">
-								<SceneExplore className="scene-explore" />
-								<ActionTabs className="action-tabs" />
-							</div>
-						</Panel>
-					</PanelContainer>
-				</CacheProvider>
-			</globalContext.Provider>
-		</globalUtilsContext.Provider>
-	)
+  useEffect(() => {
+    let outline: Outline
+    const hook = (renderer: WebGLRenderer, _: Scene, camera: Camera) => {
+      outline?.render(renderer, camera as PerspectiveCamera)
+    }
+    if (props.highlightSelected && globalState.targetObject instanceof Mesh && props.scene) {
+      outline = new Outline(globalState.targetObject)
+      // @ts-ignore
+      props.scene.registerAfterRenderHook(hook)
+    }
+
+    return () => {
+      outline?.dispose()
+      // @ts-ignore
+      props.scene.unregisterAfterRenderHook(hook)
+    }
+
+  }, [props.scene, props.highlightSelected, globalState.targetObject])
+
+  return (
+    <globalUtilsContext.Provider value={globalUtils.current}>
+      <globalContext.Provider value={globalState}>
+        <CacheProvider value={cache}>
+          <PanelContainer
+            className={
+              props.popupMode
+                ? `${INSPECTOR_PANEL_CLASS_NAME} popup`
+                : `${INSPECTOR_PANEL_CLASS_NAME}`
+            }
+          >
+            <div className="resize" />
+            <div className="resize-horizontal-line" />
+            <Panel className="panel">
+              <div className="header">
+                <div className="title">INSPECTOR</div>
+                <div className="actions">
+                  <IconPopup className="action popup" color="#fff" onClick={openPopup} />
+                  <IconClose className="action close" onClick={closePanel} />
+                </div>
+              </div>
+              <div className="content">
+                <SceneExplore className="scene-explore" />
+                <ActionTabs className="action-tabs" />
+              </div>
+            </Panel>
+          </PanelContainer>
+        </CacheProvider>
+      </globalContext.Provider>
+    </globalUtilsContext.Provider>
+  )
 }

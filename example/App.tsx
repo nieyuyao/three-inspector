@@ -35,7 +35,7 @@ export function App() {
     const material = new THREE.MeshBasicMaterial({ color: 0xff00ff })
     const cube = new THREE.Mesh(geometry, material)
 
-    // const axes = new THREE.AxesHelper(1000)
+    const axes = new THREE.AxesHelper(1000)
 
     const texture = textureLoader.load(dogImgUrl)
 
@@ -54,13 +54,13 @@ export function App() {
 
     scene.add(basicMatCube)
 
-    // scene.add(axes)
+    cube.position.y = 1
 
-    ball.position.x = 2
+    scene.add(axes)
+
+    ball.position.x = -10
 
     scene.add(group)
-
-    cube.position.y = 1
 
     camera.position.x = 0
     camera.position.y = 10
@@ -83,7 +83,7 @@ export function App() {
       camera.updateProjectionMatrix()
     }
 
-    Inspector.show(scene, camera, renderer, { measureDom: canvas.parentElement! })
+    Inspector.show(scene, camera, renderer, { measureDom: canvas.parentElement!, highlightSelected: true })
     const render = () => {
       cube.rotation.y += 0.01
       cube.rotation.x += 0.01

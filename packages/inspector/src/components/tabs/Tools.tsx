@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { PerspectiveCamera } from 'three'
 import { NavigatorGizmo } from 'threejs-navigator-gizmo'
 import { ButtonComponent } from '../base/ButtonComponent'
@@ -19,15 +19,20 @@ import {
   ToolsContextUtils,
   defaultToolsContextUtils,
 } from '../../contexts/tools-context'
+import { deepClone } from '../../utils/common'
 
 export const Tools = () => {
   const { scene, camera, canvas, measureDom, renderer } = useContext<GlobalContext>(globalContext)
   const [_, setMeasureVisible] = useState(false)
   const [__, setGizmoVisible] = useState(false)
   const measureToolRef = useRef<Nullable<Measure>>(null)
-  const prevAfterRender = useRef<onAfterRender>(() => {})
   const gizmoRef = useRef<Nullable<NavigatorGizmo>>(null)
-  const [toolsState, setToolsState] = useState<ToolsContext>(defaultToolsContext)
+  const gizmoAfterSceneRenderHook = useRef(
+    () => {
+      gizmoRef.current?.update()
+    }
+  )
+  const [toolsState, setToolsState] = useState<ToolsContext>(deepClone(defaultToolsContext))
   const toolsUtils = useRef<ToolsContextUtils>({
     ...defaultToolsContextUtils,
     updateGizmo(key: keyof ToolsContext['navigatorGizmo'], val: any) {
@@ -73,13 +78,19 @@ export const Tools = () => {
           clearAlpha: 0,
         })
         gizmoRef.current = gizmo
-        prevAfterRender.current = scene.onAfterRender
-        scene.onAfterRender = (...args) => {
-          prevAfterRender.current(...args)
-          gizmo.update()
-        }
+        // @ts-ignore
+        scene.registerAfterRenderHook(gizmoAfterSceneRenderHook.current)
+        // @ts-ignore
+        scene.extraObjects.push(gizmo)
       } else {
-        scene.onAfterRender = prevAfterRender.current
+        // @ts-ignore
+        scene.unregisterAfterRenderHook(gizmoAfterSceneRenderHook.current)
+        // @ts-ignore
+        const gizmoIdx = scene.extraObjects.findIndex(obj => obj === gizmoRef.current)
+        if (gizmoIdx > -1) {
+          // @ts-ignore
+          scene.extraObjects.splice(gizmoIdx, 1)
+        }
         gizmoRef.current?.dispose()
         gizmoRef.current = null
       }
@@ -91,17 +102,25 @@ export const Tools = () => {
     if (!scene) {
       return
     }
-    const existAfRender = scene.onAfterRender
-    scene.onAfterRender = (...args) => {
-      scene.onAfterRender = existAfRender
-      canvas?.toBlob((blob) => {
+    const hook: AfterRenderHook = (renderer) => {
+      renderer.domElement.toBlob((blob: Blob) => {
         if (blob) {
           Screenshot.download(blob, 'Screenshot.png')
         }
       })
-      existAfRender(...args)
+      // @ts-ignore
+      scene.unregisterAfterRenderHook(hook)
     }
+    // @ts-ignore
+    scene.registerAfterRenderHook(hook)
   }, [canvas, scene])
+
+  useEffect(() => {
+    return () => {
+      // @ts-ignore
+      scene.unregisterAfterRenderHook(gizmoAfterSceneRenderHook.current)
+    }
+  }, [])
 
   return (
     <toolsContext.Provider value={toolsState}>

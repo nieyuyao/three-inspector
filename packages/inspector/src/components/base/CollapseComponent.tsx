@@ -31,6 +31,10 @@ export const CollapseContainer = styled.div`
 		background-color: #303030;
 		border: none;
 
+    .arco-collapse-item-header-title {
+      font-weight: bold;
+    }
+
     .arco-collapse-item-icon-hover {
       left: 4px;
     }

@@ -30,26 +30,14 @@ export const Statistic = () => {
     if (!scene) {
       return
     }
-
-    const afterRender = scene.onAfterRender
     let time = Date.now()
     let elapsed = 0
     let currentFrames = 0
-
-    // refresh per second
-    scene.onAfterRender = (
-      renderer: WebGLRenderer,
-      scene: Scene,
-      camera: Camera,
-      geometry: BufferGeometry,
-      material: Material,
-      group: Group
-    ) => {
+    const hook = () => {
       const now = Date.now()
       const delta = Date.now() - time
       elapsed += delta
       time = now
-      afterRender(renderer, scene, camera, geometry, material, group)
       currentFrames++
       if (elapsed >= 1000) {
         // refresh per second
@@ -78,6 +66,8 @@ export const Statistic = () => {
       setLights(lights)
       setMaterials(materials)
     }
+    // @ts-ignore refresh per second
+    scene.registerAfterRenderHook(hook)
 
     if (renderer) {
       const { calls, lines, points, triangles } = renderer.info.render
@@ -88,7 +78,8 @@ export const Statistic = () => {
     }
 
     return () => {
-      scene.onAfterRender = afterRender
+      // @ts-ignore
+      scene.unregisterAfterRenderHook(hook)
     }
   }, [scene, renderer])
 

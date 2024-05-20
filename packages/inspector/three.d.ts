@@ -1,6 +1,6 @@
 /// <reference types="@types/three" />
 
-interface onAfterRender {
+interface AfterRenderHook {
 	(
 		renderer: THREE.WebGLRenderer,
 		scene: THREE.Scene,
@@ -10,5 +10,3 @@ interface onAfterRender {
 		group: THREE.Group,
 	): void
 }
-
-
