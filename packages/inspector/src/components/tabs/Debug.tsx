@@ -9,7 +9,7 @@ import {
   debugContextUtils,
   DebugContext,
   DebugContextUtils,
-  defaultDebugContextUtils
+  defaultDebugContextUtils,
 } from '../../contexts/debug-context'
 import { RendererComponent } from '../debug/RendererComponent'
 import { deepClone } from '../../utils/common'
@@ -20,7 +20,7 @@ export const Debug = () => {
 
   const debugUtils = useRef<DebugContextUtils>({
     ...defaultDebugContextUtils,
-		updateHelpers: (key: keyof DebugContext['helpers'], val: boolean) => {
+    updateHelpers: (key: keyof DebugContext['helpers'], val: boolean) => {
       const helpers = debugState.helpers
       helpers[key] = val
       setDebugState((prevState) => {
@@ -29,19 +29,18 @@ export const Debug = () => {
           helpers,
         }
       })
-		},
-	})
+    },
+  })
 
   const toggleGridVisible = useCallback(
     (visible: boolean) => {
       if (!scene) {
         return
       }
-      if (visible) {
-        scene.add(new InfiniteGrid(0x888888))
-      } else {
-        scene.getObjectByName('InspectorInfiniteGrid')?.removeFromParent()
-      }
+      debugUtils.current.updateHelpers('grid', visible)
+      visible
+        ? scene.add(new InfiniteGrid(0x888888))
+        : scene.getObjectByName('InspectorInfiniteGrid')?.removeFromParent()
     },
     [scene]
   )
@@ -50,10 +49,11 @@ export const Debug = () => {
     <debugContext.Provider value={debugState}>
       <debugContextUtils.Provider value={debugUtils.current}>
         <CollapseComponent label="Helpers" defaultOpened>
-          <SwitchComponent checked={debugState.helpers.grid} name="Grid" onChange={(val) => {
-            toggleGridVisible(val)
-            debugUtils.current.updateHelpers('grid', val)
-          }} />
+          <SwitchComponent
+            checked={debugState.helpers.grid}
+            name="Grid"
+            onChange={toggleGridVisible}
+          />
         </CollapseComponent>
         <RendererComponent />
       </debugContextUtils.Provider>

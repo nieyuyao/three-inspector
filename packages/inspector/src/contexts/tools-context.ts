@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import { deepClone } from '../utils/common'
 
 export interface ToolsContext {
   measure: {
@@ -17,7 +18,7 @@ export interface ToolsContext {
   }
 }
 
-export const defaultToolsContext = {
+export const DEFAULT_TOOLS_CONTEXT_VALUE = {
   measure: {
     visible: false
   },
@@ -34,6 +35,8 @@ export const defaultToolsContext = {
   }
 }
 
+export const toolsContextValue = deepClone(DEFAULT_TOOLS_CONTEXT_VALUE)
+
 export interface ToolsContextUtils {
   updateMeasure(key: string, val: boolean): void
   updateGizmo(key: string, val: boolean): void
@@ -48,6 +51,6 @@ export const defaultToolsContextUtils = {
   updateWebP() {}
 }
 
-export const toolsContext = createContext<ToolsContext>(defaultToolsContext)
+export const toolsContext = createContext<ToolsContext>(toolsContextValue)
 
 export const toolsContextUtils = createContext<ToolsContextUtils>(defaultToolsContextUtils)

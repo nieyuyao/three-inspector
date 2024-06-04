@@ -134,7 +134,7 @@ export const ActionTabs = (props: Props) => {
 			<div className="resize-vertical-line" />
 			<Tabs defaultActiveTab="Properties">
 				{tabs.map((tab) => (
-					<Tabs.TabPane destroyOnHide key={tab.key} title={tab.title}>
+					<Tabs.TabPane key={tab.key} title={tab.title}>
 						{tab.children}
 					</Tabs.TabPane>
 				))}

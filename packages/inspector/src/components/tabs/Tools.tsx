@@ -13,7 +13,8 @@ import { GLTFExporterComponent } from '../tools/GLTFExporterComponent'
 import { GLTFImporterComponent } from '../tools/GLTFImporterComponent'
 import { WebPExporterComponent } from '../tools/WebPExporterComponent'
 import {
-  defaultToolsContext,
+  DEFAULT_TOOLS_CONTEXT_VALUE,
+  toolsContextValue,
   toolsContext,
   ToolsContext,
   ToolsContextUtils,
@@ -27,12 +28,10 @@ export const Tools = () => {
   const [__, setGizmoVisible] = useState(false)
   const measureToolRef = useRef<Nullable<Measure>>(null)
   const gizmoRef = useRef<Nullable<NavigatorGizmo>>(null)
-  const gizmoAfterSceneRenderHook = useRef(
-    () => {
-      gizmoRef.current?.update()
-    }
-  )
-  const [toolsState, setToolsState] = useState<ToolsContext>(deepClone(defaultToolsContext))
+  const gizmoAfterSceneRenderHook = useRef(() => {
+    gizmoRef.current?.update()
+  })
+  const [toolsState, setToolsState] = useState<ToolsContext>(toolsContextValue)
   const toolsUtils = useRef<ToolsContextUtils>({
     ...defaultToolsContextUtils,
     updateGizmo(key: keyof ToolsContext['navigatorGizmo'], val: any) {
@@ -44,7 +43,7 @@ export const Tools = () => {
           gizmo,
         }
       })
-    }
+    },
   })
 
   const onMeasureVisibleChanged = useCallback(
@@ -65,11 +64,11 @@ export const Tools = () => {
 
   const onNavGizmoVisibleChanged = useCallback(
     (visible: boolean) => {
-      setGizmoVisible(visible)
-      toolsUtils.current.updateGizmo('visible', visible)
       if (!scene) {
         return
       }
+      setGizmoVisible(visible)
+      toolsUtils.current.updateGizmo('visible', visible)
       const enableGizmo = visible && camera && renderer
       if (enableGizmo) {
         const gizmo = new NavigatorGizmo(camera as PerspectiveCamera, renderer, {
@@ -86,7 +85,7 @@ export const Tools = () => {
         // @ts-ignore
         scene.unregisterAfterRenderHook(gizmoAfterSceneRenderHook.current)
         // @ts-ignore
-        const gizmoIdx = scene.extraObjects.findIndex(obj => obj === gizmoRef.current)
+        const gizmoIdx = scene.extraObjects.findIndex((obj) => obj === gizmoRef.current)
         if (gizmoIdx > -1) {
           // @ts-ignore
           scene.extraObjects.splice(gizmoIdx, 1)
@@ -116,11 +115,13 @@ export const Tools = () => {
   }, [canvas, scene])
 
   useEffect(() => {
+    // reset context
+    setToolsState(deepClone(DEFAULT_TOOLS_CONTEXT_VALUE))
     return () => {
       // @ts-ignore
       scene.unregisterAfterRenderHook(gizmoAfterSceneRenderHook.current)
     }
-  }, [])
+  }, [scene])
 
   return (
     <toolsContext.Provider value={toolsState}>

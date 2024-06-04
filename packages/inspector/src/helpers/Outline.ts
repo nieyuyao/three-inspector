@@ -58,8 +58,8 @@ class FullScreen extends Mesh<BufferGeometry, ShaderMaterial> {
           vec4 uvOffset = vec4(1.0, 0.0, 0.0, 1.0) * vec4(invSize, invSize);
           vec4 c1 = texture2D(maskTexture, vUv + uvOffset.xy);
 					vec4 c2 = texture2D(maskTexture, vUv - uvOffset.xy);
-					vec4 c3 = texture2D(maskTexture, vUv + uvOffset.yw);
-					vec4 c4 = texture2D(maskTexture, vUv - uvOffset.yw);
+					vec4 c3 = texture2D(maskTexture, vUv + uvOffset.zw);
+					vec4 c4 = texture2D(maskTexture, vUv - uvOffset.zw);
           float diff1 = (c1.a - c2.a) * 0.5;
 					float diff2 = (c3.a - c4.a) * 0.5;
 					float d = length(vec2(diff1, diff2));
@@ -81,6 +81,8 @@ export class Outline extends EventDispatcher {
 
   private fs = new FullScreen()
 
+  private savedFrustumCulled = false
+
   constructor(object: Mesh, options?: Partial<Options>) {
     super()
     this.options = {
@@ -88,6 +90,8 @@ export class Outline extends EventDispatcher {
       ...options,
     }
     this.object = object
+    this.savedFrustumCulled = this.object.frustumCulled
+    this.object.frustumCulled = false
     this.target = this.copyObject(object)
   }
 
@@ -127,6 +131,7 @@ export class Outline extends EventDispatcher {
     const userClearAlpha = renderer.getClearAlpha()
     renderer.autoClear = false
     const mat = this.target.material as ShaderMaterial
+    this.object.frustumCulled
     mat.uniforms.modelViewMat.value = this.object.modelViewMatrix
 
     //
@@ -153,5 +158,6 @@ export class Outline extends EventDispatcher {
     // @ts-ignore
     this.target.material.dispose()
     this.rt.dispose()
+    this.object.frustumCulled = this.savedFrustumCulled
   }
 }
