@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Line } from './Line'
+import { Line } from '../line/Line'
 import { Slider } from '@arco-design/web-react'
-import { Nullable } from '../../types'
+import { Nullable } from '../../../types'
 
 interface Props {
   label?: string

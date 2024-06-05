@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { RgbaColorPicker, RgbColorPicker, type RgbaColor, type RgbColor } from 'react-colorful'
-import styled from '@emotion/styled'
-import { NumericInputComponent } from './NumericInputComponent'
-import { Line } from './Line'
-import { Nullable } from '../../types'
-import { INSPECTOR_PANEL_CLASS_NAME } from '../../utils/constants'
+import { NumericInputComponent } from '../numberic-input/NumericInput'
+import { Line } from '../line/Line'
+import { Nullable } from '../../../types'
+import { INSPECTOR_PANEL_CLASS_NAME } from '../../../utils/constants'
+import './index.scss'
 
 interface Props {
   name: string
@@ -20,43 +20,6 @@ const color2String = (color: RgbColor | RgbaColor) => {
     ? `rgba(${color.r}, ${color.g}, ${color.b}, ${(color as RgbaColor).a})`
     : `rgb(${color.r}, ${color.g}, ${color.b})`
 }
-
-const Preview = styled.div<{ bgColor: string; isColourless: boolean }>`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 24px;
-  background-color: ${(props) => props.bgColor};
-  cursor: pointer;
-  z-index: 10;
-
-  &:before {
-    display: ${(props) => (props.isColourless ? 'block' : 'none')};
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: 4px;
-    background-color: #fff;
-  }
-
-  &:after {
-    display: ${(props) => (props.isColourless ? 'block' : 'none')};
-    content: '';
-    position: absolute;
-    left: -4px;
-    top: 11px;
-    width: 32px;
-    height: 1px;
-    background-color: #fff;
-    background-color: red;
-    transform: rotate(45deg);
-  }
-
-`
 
 const rgbPresetColors: RgbColor[] = [
   { r: 255, g: 0, b: 0 },
@@ -94,7 +57,6 @@ export const ColorComponent = (props: Props) => {
     return props.alpha ? ['r', 'g', 'b', 'a'] : ['r', 'g', 'b']
   }, [props.alpha])
 
-
   const openPicker = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       if (event.target === previewDivRef.current) {
@@ -113,7 +75,7 @@ export const ColorComponent = (props: Props) => {
     const winHeight = window.innerHeight
     return {
       right: `${winWidth - rect.left + 4}px`,
-      top: `${rect.top + 324 > winHeight ? winHeight - 324 - 4 : rect.top}px`
+      top: `${rect.top + 324 > winHeight ? winHeight - 324 - 4 : rect.top}px`,
     }
   }, [pickerVisible])
 
@@ -149,67 +111,77 @@ export const ColorComponent = (props: Props) => {
     setColourless(true)
   }, [onChange])
 
+  const colorPreviewClass = useMemo(() => {
+    return isColourless ? `color-preview colourless` : 'color-preview'
+  }, [isColourless])
+
   return (
-    <Line
-      label={props.name}
-      contentStyle={{ overflow: 'unset', position: 'relative', height: '100%' }}
-    >
-      <Preview
-        ref={previewDivRef}
-        isColourless={isColourless}
-        bgColor={color2String(color)}
-        onClick={openPicker}
+    <div className="three-inspector-color">
+      <Line
+        label={props.name}
+        contentStyle={{ overflow: 'unset', position: 'relative', height: '100%' }}
       >
-        {createPortal(
-          pickerVisible ? (
-            <div className='color-picker'>
-              <div className='color-picker-mask' onClick={() => setPickerVisible(false) }/>
-              <div className="color-picker-content" style={pickerStyle} onClick={(e: React.MouseEvent) => {
-                e.stopPropagation()
-              }}>
-                <div className="preset">
-                  {props.showColourless && (
-                    <div className="colourless preset-color" onClick={clearColor} />
+        <div
+          className={colorPreviewClass}
+          ref={previewDivRef}
+          style={{ backgroundColor: color2String(color) }}
+          onClick={openPicker}
+        >
+          {createPortal(
+            pickerVisible ? (
+              <div className="color-picker">
+                <div className="color-picker-mask" onClick={() => setPickerVisible(false)} />
+                <div
+                  className="color-picker-content"
+                  style={pickerStyle}
+                  onClick={(e: React.MouseEvent) => {
+                    e.stopPropagation()
+                  }}
+                >
+                  <div className="preset">
+                    {props.showColourless && (
+                      <div className="colourless preset-color" onClick={clearColor} />
+                    )}
+                    {presetColors.map((color, i) => {
+                      return (
+                        <div
+                          key={i}
+                          className="preset-color"
+                          style={{ backgroundColor: color2String(color) }}
+                          onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation()
+                            e.nativeEvent.stopImmediatePropagation()
+                            e.preventDefault()
+                            onPickerChange(color)
+                          }}
+                        ></div>
+                      )
+                    })}
+                  </div>
+                  {props.alpha ? (
+                    <RgbaColorPicker color={color as RgbaColor} onChange={onPickerChange} />
+                  ) : (
+                    <RgbColorPicker color={color} onChange={onPickerChange} />
                   )}
-                  {presetColors.map((color, i) => {
+                  {comps.map((comp) => {
                     return (
-                      <div
-                        key={i}
-                        className="preset-color"
-                        style={{ backgroundColor: color2String(color) }}
-                        onClick={(e:  React.MouseEvent) => {
-                          e.stopPropagation()
-                          e.nativeEvent.stopImmediatePropagation()
-                          e.preventDefault()
-                          onPickerChange(color)
-                        }}
-                      ></div>
+                      <NumericInputComponent
+                        min={0}
+                        max={comp === 'a' ? 1 : 255}
+                        key={comp}
+                        prop={comp}
+                        defaultValue={(color as any)[comp]}
+                        onChange={onInputChange}
+                      />
                     )
                   })}
                 </div>
-                {props.alpha ? (
-                  <RgbaColorPicker color={color as RgbaColor} onChange={onPickerChange} />
-                ) : (
-                  <RgbColorPicker color={color} onChange={onPickerChange} />
-                )}
-                {comps.map((comp) => {
-                  return (
-                    <NumericInputComponent
-                      min={0}
-                      max={comp === 'a' ? 1 : 255}
-                      key={comp}
-                      prop={comp}
-                      defaultValue={(color as any)[comp]}
-                      onChange={onInputChange}
-                    />
-                  )
-                })}
               </div>
-            </div>
-          ) : null,
-          document.querySelector(`.${INSPECTOR_PANEL_CLASS_NAME}`) || document.body
-        )}
-      </Preview>
-    </Line>
+            ) : null,
+            document.querySelector(`.${INSPECTOR_PANEL_CLASS_NAME}`) || document.body
+          )}
+        </div>
+      </Line>
+    </div>
   )
 }

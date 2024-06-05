@@ -1,0 +1,52 @@
+@import '../../../styles/variables.scss';
+
+$collapse-prefix-cls: #{$prefix}-collapse;
+
+
+.#{$collapse-prefix-cls} {
+  margin: 4px 0;
+	.label {
+		padding: 0 4px;
+	}
+
+	.arco-collapse  {
+		margin: 0 !important;
+    overflow: unset;
+    &::after {
+      display: none;
+    }
+	}
+
+	.arco-collapse-item-header {
+    padding-left: 20px;
+		padding-top: 4px;
+		padding-bottom: 4px;
+		font-size: var(--base-font-size);
+		color: var(--base-font-color) !important;
+		background-color: #303030;
+		border: none;
+
+    .arco-collapse-item-header-title {
+      font-weight: bold;
+    }
+
+    .arco-collapse-item-icon-hover {
+      left: 4px;
+    }
+	}
+
+	.arco-collapse-item-content {
+		padding: 0 6px !important;
+		font-size: var(--base-font-size);
+		color: var(--base-font-color) !important;
+		background-color: #303030;
+	}
+
+  .arco-icon-hover:hover::before {
+    background: transparent;
+  }
+
+	.arco-collapse-item-content-box {
+		padding: 0px !important;
+	}
+}

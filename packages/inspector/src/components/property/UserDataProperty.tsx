@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { CollapseComponent } from '../base/CollapseComponent'
-import { TextAreaComponent } from '../base/TextAreaComponent'
-import { SwitchComponent } from '../base/SwitchComponent'
+import { CollapseComponent } from '../base/collapse/Collapse'
+import { TextAreaComponent } from '../base/textarea/TextArea'
+import { SwitchComponent } from '../base/switch/Switch'
 import { GlobalContext, globalContext } from '../../contexts/global-context'
 
 interface Props {
@@ -75,7 +75,7 @@ export const UserDataProperty = ({ prettyJsonDisabled }: Props) => {
 			/>
 			<TextAreaComponent
 				defaultValue={userDataText}
-				status={isValid ? '' : 'error'}
+				status={isValid ? undefined : 'error'}
 				placeholder="Enter JSON"
 				onChange={onInputChanged}
 			/>

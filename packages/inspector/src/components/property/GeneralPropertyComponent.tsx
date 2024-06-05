@@ -1,7 +1,7 @@
 import React from 'react'
 import type { Object3D } from 'three'
-import { CollapseComponent } from '../base/CollapseComponent'
-import { TextLineComponent } from '../base/TextLineComponent'
+import { CollapseComponent } from '../base/collapse/Collapse'
+import { TextLineComponent } from '../base/text-line/TextLine'
 
 const generalProps: Array<keyof THREE.Object3D> = ['uuid', 'id', 'name']
 

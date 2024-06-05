@@ -7,85 +7,14 @@ import {
 	GlobalUtilsContext,
 	globalUtilsContext,
 	globalContext,
-} from './contexts/global-context'
-import { ObjectCommands } from './components/tree-item-command/ObjectCommands'
-import { SceneCommands } from './components/tree-item-command/SceneCommands'
-import styled from '@emotion/styled'
-import IconBox from './assets/icons/box.svg?react'
-import { isMesh, isGroup, isScene, isObject3D, isLight } from './utils/object'
-import { LightCommands } from './components/tree-item-command/LightCommands'
+} from '../../contexts/global-context'
+import { ObjectCommands } from '../tree-item-command/ObjectCommands'
+import { SceneCommands } from '../tree-item-command/SceneCommands'
+import IconBox from '../../assets/icons/box.svg?react'
+import { isMesh, isGroup, isScene, isObject3D, isLight } from '../../utils/object'
+import { LightCommands } from '../tree-item-command/LightCommands'
+import './index.scss'
 
-const ExploreContainer = styled.div`
-	flex: 1;
-	min-height: 220px;
-	padding: 4px;
-	border-radius: 6px;
-	background-color: #303030;
-	overflow-x: hidden;
-	overflow-y: auto;
-	box-sizing: border-box;
-
-	// input
-	.arco-input-group-wrapper {
-		padding-top: 6px !important;
-		padding-bottom: 6px !important;
-		height: 36px;
-		background-color: #303030 !important;
-		box-sizing: border-box;
-
-		input {
-			font-size: var(--base-font-size);
-			height: 24px;
-		}
-	}
-
-	// tree
-	.arco-tree {
-		padding: 0 6px;
-
-		.arco-tree-node {
-			position: relative;
-			width: 100%;
-			padding-top: 4px;
-		}
-
-		.arco-tree-node-switcher {
-			color: var(--base-font-color);
-		}
-
-		.arco-tree-node-title {
-			width: 100%;
-			display: inline-flex;
-			align-items: center;
-			font-size: var(--base-font-size);
-			color: var(--base-font-color);
-		}
-
-		.arco-tree-node-selected {
-			border-radius: 0;
-			background-color: rgba(230, 244, 255, 0.1);
-		}
-
-		.arco-tree-node-title:hover {
-			background-color: transparent;
-		}
-
-		.arco-tree-node-icon {
-			margin-right: 4px;
-		}
-
-		.arco-tree-node-icon-hover::before {
-			background-color: transparent;
-		}
-	}
-
-	.commands {
-		position: absolute;
-		right: 0;
-		top: 0;
-		height: 100%;
-	}
-`
 
 type TreeDataNode = TreeDataType & {
 	key: string
@@ -257,7 +186,7 @@ export const SceneExplore = (props: Props) => {
 	}, [])
 
 	return (
-		<ExploreContainer className={props.className}>
+		<div className='three-inspector-explore'>
 			<Input.Search
 				size="small"
 				allowClear
@@ -279,6 +208,6 @@ export const SceneExplore = (props: Props) => {
 					renderExtra={(node) => node.dataRef?.commands}
 				/>
 			) : null}
-		</ExploreContainer>
+		</div>
 	)
 }

@@ -1,0 +1,11 @@
+@import '../../../styles/variables.scss';
+
+$image-upload-prefix-cls: #{$prefix}-image-upload;
+
+
+.#{$image-upload-prefix-cls} {
+  display: flex;
+	justify-content: center;
+	margin: 6px 1px;
+}
+

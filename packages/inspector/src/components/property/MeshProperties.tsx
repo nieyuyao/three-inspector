@@ -4,7 +4,7 @@ import { ObjectProperties } from './ObjectProperties'
 import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { BasicMaterialProperty } from './materials/BasicMaterialProperty'
 import { NormalsHelper } from '../../helpers/NormalsHelper'
-import { SwitchComponent } from '../base/SwitchComponent'
+import { SwitchComponent } from '../base/switch/Switch'
 
 export const MeshProperties = () => {
 	const { targetObject } = useContext<GlobalContext>(globalContext)

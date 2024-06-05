@@ -9,8 +9,8 @@ import {
   Vector2,
 } from 'three'
 import { REVISION } from 'three'
-import { TextLineComponent } from '../base/TextLineComponent'
-import { CollapseComponent } from '../base/CollapseComponent'
+import { TextLineComponent } from '../base/text-line/TextLine'
+import { CollapseComponent } from '../base/collapse/Collapse'
 import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { isLight, isMesh } from '../../utils/object'
 

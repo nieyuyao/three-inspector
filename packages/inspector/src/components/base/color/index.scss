@@ -1,0 +1,46 @@
+@import '../../../styles/variables.scss';
+
+$color-prefix-cls: #{$prefix}-color;
+
+
+.#{$color-prefix-cls} {
+  .color-preview {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    cursor: pointer;
+    z-index: 10;
+
+    &:before {
+      content: '';
+      display: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+
+    &:after {
+      content: '';
+      display: none;
+      position: absolute;
+      left: -4px;
+      top: 11px;
+      width: 32px;
+      height: 1px;
+      background-color: #fff;
+      background-color: red;
+      transform: rotate(45deg);
+    }
+  }
+
+  &.colourless::before,
+  &.colourless::after {
+    display: block;
+  }
+}

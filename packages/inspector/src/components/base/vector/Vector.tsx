@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import type { Vector2Like, Vector3Like, Vector4Like } from 'three'
-import { NumericInputComponent } from './NumericInputComponent'
-import styled from '@emotion/styled'
+import { NumericInputComponent } from '../numberic-input/NumericInput'
 
 interface Props {
 	name: keyof THREE.Object3D
@@ -16,11 +15,6 @@ const getVectorDimensions = (v: any) => {
 		return acc
 	}, 0)
 }
-
-const VectorContainer = styled.div`
-	font-size: var(--base-font-size);
-	color: var(--base-font-color);
-`
 
 const getKeys = (v: Vector) => {
 	const dims = getVectorDimensions(v)
@@ -50,7 +44,7 @@ export const VectorComponent = (props: Props) => {
 	)
 
 	return (
-		<VectorContainer>
+		<div className='three-inspector-vector'>
 			<div className="label">{name}</div>
 			<div className="keys">
 				{keys.map((key) => {
@@ -64,6 +58,6 @@ export const VectorComponent = (props: Props) => {
 					)
 				})}
 			</div>
-		</VectorContainer>
+		</div>
 	)
 }

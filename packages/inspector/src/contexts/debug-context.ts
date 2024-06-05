@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import { deepClone } from '../utils/common'
 
 export interface DebugContext {
   helpers: {
@@ -6,7 +7,7 @@ export interface DebugContext {
   }
 }
 
-export const defaultDebugContext = {
+export const DEFAULT_DEBUG_CONTEXT_VALUE = {
   helpers: {
     grid: false
   },
@@ -20,6 +21,8 @@ export const defaultDebugContextUtils = {
   updateHelpers() {},
 }
 
-export const debugContext = createContext<DebugContext>(defaultDebugContext)
+export const debugContextValue = deepClone(DEFAULT_DEBUG_CONTEXT_VALUE)
+
+export const debugContext = createContext<DebugContext>(debugContextValue)
 
 export const debugContextUtils = createContext<DebugContextUtils>(defaultDebugContextUtils)

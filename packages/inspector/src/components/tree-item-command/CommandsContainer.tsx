@@ -1,16 +1,18 @@
 import React, { ReactNode } from 'react'
-import styled from '@emotion/styled'
-
-export const Container = styled.div`
-	display: flex;
-	align-items: center;
-	position: absolute;
-	top: 0;
-	right: 0;
-`
 
 export const CommandsContainer = (props: { children: ReactNode }) => {
-	return <Container className='commands'>
-		{ props.children }
-	</Container>
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+      }}
+      className="commands"
+    >
+      {props.children}
+    </div>
+  )
 }

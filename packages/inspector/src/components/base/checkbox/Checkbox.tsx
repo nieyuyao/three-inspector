@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Switch } from '@arco-design/web-react'
-import { Line } from './Line'
+import { Checkbox } from '@arco-design/web-react'
+import { Line } from '../line/Line'
 
 interface Props {
 	name: string
@@ -9,9 +9,9 @@ interface Props {
 	onChange?: (val: boolean) => void
 }
 
-export const SwitchComponent = (props: Props) => {
+export const CheckboxComponent = (props: Props) => {
 	const { checked } = props
-	const [innerChecked, setInnerChecked] = useState(checked)
+	const [ innerChecked, setInnerChecked ] = useState(checked)
 	const handleChange = (checked: boolean) => {
 		if (props.onChange) {
 			setInnerChecked(checked)
@@ -22,9 +22,7 @@ export const SwitchComponent = (props: Props) => {
 	useEffect(() => {
 		setInnerChecked(checked)
 	}, [checked])
-	return (
-		<Line label={props.name}>
-			<Switch size="small" onChange={handleChange} checked={innerChecked} disabled={props.disabled} />
-		</Line>
-	)
+	return <Line label={props.name}>
+		<Checkbox onChange={handleChange} checked={innerChecked} disabled={props.disabled} />
+	</Line>
 }

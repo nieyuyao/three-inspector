@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import type { MeshPhongMaterial } from 'three'
 import { CommonMaterialProperty } from './CommonMaterialProperty'
 import { MapProperty } from './MapProperty'
-import { NumericInputComponent } from '../../base/NumericInputComponent'
+import { NumericInputComponent } from '../../base/numberic-input/NumericInput'
 
 interface Props {
   material: MeshPhongMaterial

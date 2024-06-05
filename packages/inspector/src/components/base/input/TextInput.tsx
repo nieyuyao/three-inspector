@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Input } from '@arco-design/web-react'
-import { isReadonly } from '../../utils/prop'
-import { Line } from './Line'
+import { isReadonly } from '../../../utils/prop'
+import { Line } from '../line/Line'
 
 interface Props {
 	name: string

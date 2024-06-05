@@ -1,7 +1,7 @@
 import React from 'react'
 import type { Object3D } from 'three'
-import { VectorComponent } from '../base/VectorComponent'
-import { CollapseComponent } from '../base/CollapseComponent'
+import { VectorComponent } from '../base/vector/Vector'
+import { CollapseComponent } from '../base/collapse/Collapse'
 
 export interface Props {
 	object: Object3D

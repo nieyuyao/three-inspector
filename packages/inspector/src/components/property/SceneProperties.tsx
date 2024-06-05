@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import { Color, Texture, type Scene, Fog } from 'three'
-import { ColorComponent } from '../base/ColorComponent'
+import { ColorComponent } from '../base/color/Color'
 import { GeneralPropertyComponent } from './GeneralPropertyComponent'
 import { RgbColor } from 'react-colorful'
 import { rbgColor2Color } from '../../utils/color'
-import { SwitchCollapseComponent } from '../base/SwitchCollapseComponent'
+import { SwitchCollapseComponent } from '../base/collapse-with-switch/CollapseWithSwitch'
 import { TextureProperty } from './textures/TextureProperty'
-import { NumericInputComponent } from '../base/NumericInputComponent'
+import { NumericInputComponent } from '../base/numberic-input/NumericInput'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
 
 export interface Props {

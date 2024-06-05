@@ -165,11 +165,14 @@ export class Inspector {
     const userOnAfterRender = scene.onAfterRender
     // @ts-ignore
     scene.afterRenderHooks = [] as Array<AfterRenderHook>
+    const that = scene
     // @ts-ignore
     scene.registerAfterRenderHook = function(hook: AfterRenderHook) {
-      const idx = this.afterRenderHooks.findIndex((ah: AfterRenderHook) => ah === hook)
+       // @ts-ignore
+      const idx = that.afterRenderHooks.findIndex((ah: AfterRenderHook) => ah === hook)
       if (idx < 0) {
-        this.afterRenderHooks.push(hook)
+         // @ts-ignore
+        that.afterRenderHooks.push(hook)
       }
     }
     // @ts-ignore
@@ -188,7 +191,8 @@ export class Inspector {
       group: Group
     ) {
       userOnAfterRender(renderer, scene, camera, geometry, material, group)
-      this.afterRenderHooks.forEach((hook: AfterRenderHook) => hook(renderer, scene, camera, geometry, material, group))
+       // @ts-ignore
+      that.afterRenderHooks.forEach((hook: AfterRenderHook) => hook(renderer, scene, camera, geometry, material, group))
     }
     // @ts-ignore
     scene.extraObjects = []

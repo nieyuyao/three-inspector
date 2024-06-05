@@ -1,0 +1,9 @@
+@import '../../../styles/variables.scss';
+
+$vector-prefix-cls: #{$prefix}-vector;
+
+
+.#{$vector-prefix-cls} {
+  font-size: var(--base-font-size);
+	color: var(--base-font-color);
+}

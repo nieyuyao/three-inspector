@@ -1,6 +1,7 @@
 import React, { type CSSProperties } from 'react'
-import styled from '@emotion/styled'
-import { Button, Upload, UploadProps } from '@arco-design/web-react'
+import Button from '@arco-design/web-react/es/Button'
+import Upload, { UploadProps } from '@arco-design/web-react/es/Upload'
+import './index.scss'
 
 interface Props {
 	text: string
@@ -8,22 +9,16 @@ interface Props {
 	onChange?: (file: File) => void
 }
 
-const UploadContainer = styled.div`
-	display: flex;
-	justify-content: center;
-	margin: 6px 1px;
-`
-
 export const ImageUploadComponent = (props: Props) => {
 	const onBeforeUpload: UploadProps['beforeUpload'] = (file: File) => {
 		props.onChange?.(file)
 		return false
 	}
 	return (
-		<UploadContainer style={props.style}>
+		<div className='three-inspector-image-upload' style={props.style}>
 			<Upload accept=".jpg,.png,.jpeg" beforeUpload={onBeforeUpload} showUploadList={false}>
 				<Button>{props.text}</Button>
 			</Upload>
-		</UploadContainer>
+		</div>
 	)
 }

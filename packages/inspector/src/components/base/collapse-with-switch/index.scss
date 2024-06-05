@@ -1,0 +1,45 @@
+@import '../../../styles/variables.scss';
+
+$cws-prefix-cls: #{$prefix}-cws;
+
+
+.#{$cws-prefix-cls} {
+  margin-top: 4px;
+	padding: 6px;
+	color: #fff;
+	font-size: var(--base-font-size);
+	background-color: var(--base-tab-grid-bg-color);
+	border-radius: 8px;
+	.collapse-switch {
+		display: flex;
+		justify-content: space-between;
+	}
+	.arco-collapse  {
+		margin: 0 !important;
+    overflow: unset;
+    &::after {
+      display: none;
+    }
+	}
+
+	.panel {
+		.arco-collapse-item-header {
+			font-size: var(--base-font-size);
+			color: var(--base-font-color) !important;
+			background-color: #303030;
+			border: none;
+			padding: 0;
+		}
+
+		.arco-collapse-item-content {
+			padding: 0 !important;
+			font-size: var(--base-font-size);
+			color: var(--base-font-color) !important;
+			background-color: var(--base-tab-grid-bg-color);
+		}
+
+		.arco-collapse-item-content-box {
+			padding: 6px !important;
+		}
+	}
+}

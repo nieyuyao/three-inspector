@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { CollapseComponent } from '../../base/CollapseComponent'
-import { SwitchCollapseComponent } from '../../base/SwitchCollapseComponent'
+import { CollapseComponent } from '../../base/collapse/Collapse'
+import { SwitchCollapseComponent } from '../../base/collapse-with-switch/CollapseWithSwitch'
 import { Texture, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, type Wrapping } from 'three'
-import styled from '@emotion/styled'
 import { Nullable } from '../../../types'
-import { ImageUploadComponent } from '../../base/ImageUploadComponent'
-import { TextLineComponent } from '../../base/TextLineComponent'
-import { SelectComponent } from '../../base/SelectComponent'
-import { CheckboxComponent } from '../../base/CheckboxComponent'
+import { ImageUploadComponent } from '../../base/image-upload/ImageUpload'
+import { TextLineComponent } from '../../base/text-line/TextLine'
+import { SelectComponent } from '../../base/select/Select'
+import { CheckboxComponent } from '../../base/checkbox/Checkbox'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
 
 interface Props {
@@ -17,13 +16,6 @@ interface Props {
 	texture?: Nullable<Texture>
 	onTextureChanged?: (texture: Texture) => void
 }
-
-const Canvas = styled.canvas`
-	display: block;
-	margin: 0 auto;
-	width: 256px;
-	height: 256px;
-`
 
 const updatePreviewCanvas = (canvas: HTMLCanvasElement, width: number, height: number) => {
 	canvas.width = width
@@ -134,7 +126,12 @@ export const TextureProperty = (props: Props) => {
 	const renderGrid = () => {
 		return (
 			<>
-				<Canvas className="texture-preview-canvas" ref={canvasRef} width={256} height={256} />
+				<canvas className="texture-preview-canvas" ref={canvasRef} width={256} height={256} style={{
+          display: 'block',
+          margin: '0 auto',
+          width: '256px',
+          height: '256px',
+        }}/>
 				<ImageUploadComponent text="Upload texture file" onChange={onUpload} />
 				<TextLineComponent name="Name" text={texture?.name || '-'} />
 				<TextLineComponent name="Id" text={texture?.id || '-'} />

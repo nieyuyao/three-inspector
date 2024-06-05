@@ -15,8 +15,8 @@ import {
   AgXToneMapping,
   REVISION,
 } from 'three'
-import { CollapseComponent } from '../base/CollapseComponent'
-import { SelectComponent } from '../base/SelectComponent'
+import { CollapseComponent } from '../base/collapse/Collapse'
+import { SelectComponent } from '../base/select/Select'
 import { GlobalContext, globalContext } from '../../contexts/global-context'
 import { INSPECTOR_CLASS_NAME } from '../../utils/constants'
 

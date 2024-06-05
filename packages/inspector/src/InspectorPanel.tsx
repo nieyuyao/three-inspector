@@ -7,15 +7,13 @@ import {
 } from './contexts/global-context'
 import { type Scene, type Camera, type WebGLRenderer, type PerspectiveCamera, Mesh } from 'three'
 import { Nullable } from './types'
-import styled from '@emotion/styled'
-import { CacheProvider } from '@emotion/react'
-import createCache from '@emotion/cache'
 import { IconClose } from '@arco-design/web-react/icon'
 import IconPopup from './assets/icons/popup.svg?react'
-import { SceneExplore } from './SceneExplore'
-import { ActionTabs } from './ActionTabs'
+import { SceneExplore } from './components/scene-explore/SceneExplore'
+import { ActionTabs } from './components/tabs/ActionTabs'
 import { INSPECTOR_PANEL_CLASS_NAME } from './utils/constants'
 import { Outline } from './helpers/Outline'
+import './inspector-panel.scss'
 
 export interface InspectorPanelProps {
   scene: Scene
@@ -29,106 +27,6 @@ export interface InspectorPanelProps {
   measureDom?: Nullable<HTMLElement>
   highlightSelected?: boolean
 }
-
-const flexCenter = `
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`
-
-const PanelContainer = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-  z-index: 9999;
-
-  .resize {
-    min-width: 360px;
-    width: 360px;
-    height: 16px;
-    opacity: 0;
-    resize: horizontal;
-    overflow: scroll;
-    transform: scale(-1, 100);
-  }
-
-  .resize-horizontal-line {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 4px;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  &.popup {
-    width: 100%;
-    height: 100%;
-
-    .resize,
-    .resize-horizontal-line {
-      display: none;
-      width: 100%;
-      height: 100%;
-    }
-
-    .panel {
-      width: 100%;
-      margin-left: 0;
-    }
-  }
-`
-
-const Panel = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(100% - 4px);
-  height: 100%;
-  margin-left: 4px;
-  background-color: var(--base-background-color);
-
-  .header {
-    position: relative;
-    color: #fff;
-    height: 30px;
-    .title {
-      ${flexCenter}
-      height: 100%;
-      font-size: 16px;
-    }
-
-    .actions {
-      display: flex;
-      position: absolute;
-      top: 0;
-      right: 12px;
-      height: 100%;
-    }
-
-    .action {
-      ${flexCenter}
-      margin-left: 4px;
-      width: 16px;
-      height: 100%;
-      cursor: pointer;
-
-      & > svg {
-        width: 14px;
-        height: 14px;
-      }
-    }
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    height: calc(100% - 30px);
-  }
-`
 
 export const InspectorPanel = (props: InspectorPanelProps) => {
   const [globalState, setGlobalState] = useState<GlobalContext>({
@@ -155,11 +53,6 @@ export const InspectorPanel = (props: InspectorPanelProps) => {
 
   const openPopup = () => props.onPopup()
 
-  const cache = createCache({
-    key: 'three-inspector',
-    container: props.container,
-  })
-
   useEffect(() => {
     let outline: Outline
     const hook = (renderer: WebGLRenderer, _: Scene, camera: Camera) => {
@@ -182,8 +75,7 @@ export const InspectorPanel = (props: InspectorPanelProps) => {
   return (
     <globalUtilsContext.Provider value={globalUtils.current}>
       <globalContext.Provider value={globalState}>
-        <CacheProvider value={cache}>
-          <PanelContainer
+          <div
             className={
               props.popupMode
                 ? `${INSPECTOR_PANEL_CLASS_NAME} popup`
@@ -192,7 +84,7 @@ export const InspectorPanel = (props: InspectorPanelProps) => {
           >
             <div className="resize" />
             <div className="resize-horizontal-line" />
-            <Panel className="panel">
+            <div className="panel-content">
               <div className="header">
                 <div className="title">INSPECTOR</div>
                 <div className="actions">
@@ -201,12 +93,11 @@ export const InspectorPanel = (props: InspectorPanelProps) => {
                 </div>
               </div>
               <div className="content">
-                <SceneExplore className="scene-explore" />
-                <ActionTabs className="action-tabs" />
+                <SceneExplore />
+                <ActionTabs />
               </div>
-            </Panel>
-          </PanelContainer>
-        </CacheProvider>
+            </div>
+          </div>
       </globalContext.Provider>
     </globalUtilsContext.Provider>
   )

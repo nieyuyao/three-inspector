@@ -1,6 +1,6 @@
 import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
 import { Input } from '@arco-design/web-react'
-import { Line } from './Line'
+import { Line } from '../line/Line'
 
 interface Props {
   label?: string

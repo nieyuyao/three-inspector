@@ -3,7 +3,7 @@ import type { Material, Texture } from 'three'
 import { TextureProperty } from '../textures/TextureProperty'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
 import { UVHelper } from '../../../helpers/UVHelper'
-import { SwitchComponent } from '../../base/SwitchComponent'
+import { SwitchComponent } from '../../base/switch/Switch'
 import { Nullable } from '../../../types'
 import { upperLabel } from '../../../utils/label'
 

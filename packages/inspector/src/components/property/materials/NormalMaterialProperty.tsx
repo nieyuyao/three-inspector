@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import type { MeshNormalMaterial } from 'three'
 import { CommonMaterialProperty } from './CommonMaterialProperty'
 import { MapProperty } from './MapProperty'
-import { NumericSlider } from '../../base/NumericSlider'
+import { NumericSlider } from '../../base/numberic-slider/NumericSlider'
 
 interface Props {
 	material: MeshNormalMaterial

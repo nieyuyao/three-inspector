@@ -2,11 +2,11 @@ import React, { useCallback } from 'react'
 import type { MeshStandardMaterial } from 'three'
 import { CommonMaterialProperty } from './CommonMaterialProperty'
 import { MapProperty } from './MapProperty'
-import { NumericSlider } from '../../base/NumericSlider'
-import { ColorComponent } from '../../base/ColorComponent'
+import { NumericSlider } from '../../base/numberic-slider/NumericSlider'
+import { ColorComponent } from '../../base/color/Color'
 import { color2RgbaColor, rbgColor2Color } from '../../../utils/color'
 import { RgbColor } from 'react-colorful'
-import { NumericInputComponent } from '../../base/NumericInputComponent'
+import { NumericInputComponent } from '../../base/numberic-input/NumericInput'
 
 interface Props {
 	material: MeshStandardMaterial

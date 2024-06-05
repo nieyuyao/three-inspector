@@ -22,8 +22,6 @@ export const renderComponent = (object: Object3D) => {
 export const Properties = () => {
 	const { targetObject } = useContext<GlobalContext>(globalContext)
 	return targetObject ? (
-		<div>
-			{ renderComponent(targetObject) }
-		</div>
+		<>{ renderComponent(targetObject) }</>
 	) : null
 }

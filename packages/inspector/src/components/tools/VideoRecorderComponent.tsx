@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
-import { ButtonComponent } from '../base/ButtonComponent'
+import { ButtonComponent } from '../base/button/Button'
 import { VideoRecorder } from '../../helpers/VideoRecorder'
 import { download }  from '../../utils/tool'
 import { GlobalContext, globalContext } from '../../contexts/global-context'

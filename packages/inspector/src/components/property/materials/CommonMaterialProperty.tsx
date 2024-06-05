@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
-import { CheckboxComponent } from '../../base/CheckboxComponent'
+import { CheckboxComponent } from '../../base/checkbox/Checkbox'
 import { BackSide, DoubleSide, FrontSide, type Material } from 'three'
-import { NumericSlider } from '../../base/NumericSlider'
-import { SelectComponent } from '../../base/SelectComponent'
-import { SwitchComponent } from '../../base/SwitchComponent'
+import { NumericSlider } from '../../base/numberic-slider/NumericSlider'
+import { SelectComponent } from '../../base/select/Select'
+import { SwitchComponent } from '../../base/switch/Switch'
 
 export const CommonMaterialProperty = <T extends Material>(props: { material: T}) => {
 	const { material } = props

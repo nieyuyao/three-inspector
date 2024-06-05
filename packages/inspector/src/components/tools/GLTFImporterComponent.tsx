@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import { ButtonComponent } from '../base/ButtonComponent'
+import { ButtonComponent } from '../base/button/Button'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { globalContext } from '../../contexts/global-context'
 
